@@ -33,3 +33,6 @@ dist-ssr
 
 # Texturas baixadas (Poly Haven, CC0) usadas só no Blender
 design/texturas/
+
+# Backups automáticos do Blender
+*.blend1
