@@ -1,10 +1,22 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useUi } from '@/store/ui'
 import type { ViewMode } from '@/types/library'
 import { Bookcase } from './Bookcase'
 import { LIBRARY, range } from './config'
 
 /** A partir desta largura (Tailwind "lg") as 3 estantes aparecem sempre lado a lado. */
 const DESKTOP_QUERY = '(min-width: 64rem)'
+
+/** Rola o carrossel de estantes até a estante "index". */
+function scrollScrollerTo(
+  scroller: HTMLElement | null,
+  index: number,
+  behavior: ScrollBehavior,
+) {
+  const target = scroller?.children[index] as HTMLElement | undefined
+  if (!scroller || !target) return
+  scroller.scrollTo({ left: target.offsetLeft, behavior })
+}
 
 const prefersReducedMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -26,19 +38,31 @@ export function Library({ debug }: LibraryProps) {
   /** Estante para onde rolar assim que o modo "single" aparecer na tela. */
   const pendingScroll = useRef<number | null>(null)
 
-  const scrollToBookcase = (index: number, behavior: ScrollBehavior) => {
-    const scroller = scrollerRef.current
-    const target = scroller?.children[index] as HTMLElement | undefined
-    if (!scroller || !target) return
-    scroller.scrollTo({ left: target.offsetLeft, behavior })
-  }
+  const scrollToBookcase = (index: number, behavior: ScrollBehavior) =>
+    scrollScrollerTo(scrollerRef.current, index, behavior)
 
   // Ao sair da visão geral, já abre na estante tocada (sem animação de rolagem).
   useLayoutEffect(() => {
     if (mode !== 'single' || pendingScroll.current === null) return
-    scrollToBookcase(pendingScroll.current, 'instant')
+    scrollScrollerTo(scrollerRef.current, pendingScroll.current, 'instant')
     pendingScroll.current = null
   }, [mode])
+
+  // Livro novo adicionado: mostra a estante onde ele vai entrar (antes do voo).
+  // Escuta o store direto, para rolar na hora (antes de o voo medir o destino).
+  useEffect(
+    () =>
+      useUi.subscribe((state, prev) => {
+        const request = state.focusRequest
+        if (!request || request === prev.focusRequest) return
+        const scroller = scrollerRef.current
+        // Desktop mostra todas; na visão geral também. Só rola no modo "single".
+        if (!scroller || scroller.scrollWidth <= scroller.clientWidth) return
+        scrollScrollerTo(scroller, request.bookcase, 'instant')
+        setActive(request.bookcase)
+      }),
+    [],
+  )
 
   /** Descobre qual estante está mais visível enquanto a pessoa desliza. */
   const handleScroll = () => {

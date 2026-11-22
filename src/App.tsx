@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BookFlight } from '@/features/add-book/BookFlight'
 import { DevTools } from '@/features/dev/DevTools'
 import { SearchDialog } from '@/features/search/SearchDialog'
 import { Library } from '@/features/shelf/Library'
@@ -43,6 +44,7 @@ export default function App() {
       </button>
 
       <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <BookFlight />
     </div>
   )
 }

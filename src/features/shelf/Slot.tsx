@@ -1,8 +1,8 @@
 import type { CSSProperties } from 'react'
-import { Book3D } from '@/features/book/Book3D'
 import type { Book } from '@/types/book'
 import type { SlotPosition } from '@/types/library'
 import { LIBRARY, VIEW, slotId } from './config'
+import { ShelvedBook } from './ShelvedBook'
 
 type SlotProps = {
   position: SlotPosition
@@ -44,7 +44,7 @@ export function Slot({ position, book, debug }: SlotProps) {
           : ''
       }`}
     >
-      {book && <Book3D book={book} />}
+      {book && <ShelvedBook book={book} />}
     </div>
   )
 }

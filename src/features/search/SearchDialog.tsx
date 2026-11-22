@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import type { SearchErrorReason } from '@/lib/googleBooks'
 import { LIBRARY } from '@/features/shelf/config'
 import { useLibrary } from '@/store/library'
+import { useUi, type Rect } from '@/store/ui'
+import type { BookInfo } from '@/types/book'
 import { SearchResult, type ResultAction } from './SearchResult'
 import { useBookSearch } from './useBookSearch'
 
@@ -26,11 +28,12 @@ const ERROR_MESSAGE: Record<SearchErrorReason, string> = {
 export function SearchDialog({ open, onClose }: SearchDialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [query, setQuery] = useState('')
-  const [justAdded, setJustAdded] = useState<Set<string>>(new Set())
   const search = useBookSearch(query)
 
   const shelvedIds = useLibrary((s) => s.books.map((b) => b.googleId).join('|'))
   const addBook = useLibrary((s) => s.addBook)
+  const startFlight = useUi((s) => s.startFlight)
+  const focusBookcase = useUi((s) => s.focusBookcase)
   const libraryFull = useLibrary(
     (s) =>
       s.books.length >=
@@ -45,11 +48,22 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
   }, [open])
 
   const actionFor = (googleId: string): ResultAction => {
-    if (shelvedIds.split('|').includes(googleId)) {
-      return justAdded.has(googleId) ? 'added' : 'on-shelf'
-    }
+    if (shelvedIds.split('|').includes(googleId)) return 'on-shelf'
     if (libraryFull) return 'full'
     return 'add'
+  }
+
+  /** Coloca o livro na estante, fecha a busca e solta o voo até o slot. */
+  const handleAdd = (book: BookInfo, coverRect: Rect) => {
+    const result = addBook(book)
+    if (!result.ok) return
+    dialogRef.current?.close()
+    focusBookcase(result.book.position.bookcase)
+    startFlight({
+      bookId: result.book.id,
+      from: coverRect,
+      coverUrl: book.coverUrl,
+    })
   }
 
   return (
@@ -94,6 +108,15 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
           aria-live="polite"
           aria-busy={search.status === 'loading'}
         >
+          {libraryFull && (
+            <p
+              role="status"
+              className="m-2 rounded-xl border border-ember/30 bg-ember/10 px-4 py-3 text-sm text-parchment/90"
+            >
+              Suas 3 estantes estão cheias. Remova um livro para colocar outro.
+            </p>
+          )}
+
           {search.status === 'idle' && (
             <p className="px-4 py-10 text-center text-parchment/50">
               Digite o nome do livro ou do autor.
@@ -139,11 +162,7 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
                   key={book.googleId}
                   book={book}
                   action={actionFor(book.googleId)}
-                  onAdd={() => {
-                    if (addBook(book).ok) {
-                      setJustAdded((prev) => new Set(prev).add(book.googleId))
-                    }
-                  }}
+                  onAdd={(rect) => handleAdd(book, rect)}
                 />
               ))}
             </ul>

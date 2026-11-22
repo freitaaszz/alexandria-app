@@ -32,6 +32,7 @@ export function Book3D({ book }: { book: Book }) {
 
   return (
     <div
+      data-book-id={book.id}
       className="relative transition-transform duration-300 ease-out [transform-style:preserve-3d] group-hover:[@media(hover:hover)]:-translate-y-[2.5%]"
       style={{ width: `${width}%`, height: `${height}%` }}
     >
