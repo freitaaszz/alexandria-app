@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { BookFlight } from '@/features/add-book/BookFlight'
 import { BookModal } from '@/features/book-details/BookModal'
 import { DevTools } from '@/features/dev/DevTools'
+import { DragAnnouncer, DragLayer } from '@/features/drag/DragLayer'
 import { SearchDialog } from '@/features/search/SearchDialog'
 import { Library } from '@/features/shelf/Library'
 import { useUi } from '@/store/ui'
@@ -53,6 +54,8 @@ export default function App() {
 
         <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
         <BookFlight />
+        <DragLayer />
+        <DragAnnouncer />
       </div>
       <BookModal />
     </>

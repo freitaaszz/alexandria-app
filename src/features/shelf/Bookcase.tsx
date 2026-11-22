@@ -12,7 +12,11 @@ type BookcaseProps = {
  */
 export function Bookcase({ index, debug }: BookcaseProps) {
   return (
-    <section aria-label={`Estante ${index + 1}`} className="@container w-full">
+    <section
+      aria-label={`Estante ${index + 1}`}
+      data-bookcase={index}
+      className="@container w-full"
+    >
       {/* Topo arqueado com ponta, inspirado no esboço */}
       <svg
         viewBox="0 0 100 22"

@@ -18,6 +18,18 @@ function scrollScrollerTo(
   scroller.scrollTo({ left: target.offsetLeft, behavior })
 }
 
+/** Índice da estante mais visível no carrossel. */
+function nearestIndex(scroller: HTMLElement) {
+  const children = Array.from(scroller.children) as HTMLElement[]
+  let nearest = 0
+  children.forEach((child, i) => {
+    const distance = Math.abs(child.offsetLeft - scroller.scrollLeft)
+    const best = Math.abs(children[nearest].offsetLeft - scroller.scrollLeft)
+    if (distance < best) nearest = i
+  })
+  return nearest
+}
+
 const prefersReducedMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -53,13 +65,28 @@ export function Library({ debug }: LibraryProps) {
   useEffect(
     () =>
       useUi.subscribe((state, prev) => {
-        const request = state.focusRequest
-        if (!request || request === prev.focusRequest) return
         const scroller = scrollerRef.current
         // Desktop mostra todas; na visão geral também. Só rola no modo "single".
         if (!scroller || scroller.scrollWidth <= scroller.clientWidth) return
-        scrollScrollerTo(scroller, request.bookcase, 'instant')
-        setActive(request.bookcase)
+
+        const focus = state.focusRequest
+        if (focus && focus !== prev.focusRequest) {
+          scrollScrollerTo(scroller, focus.bookcase, 'instant')
+          setActive(focus.bookcase)
+        }
+
+        // Arrastando um livro até a borda: desliza para a estante vizinha.
+        const page = state.pageRequest
+        if (page && page !== prev.pageRequest) {
+          const next = nearestIndex(scroller) + page.direction
+          if (next < 0 || next >= LIBRARY.bookcases) return
+          scrollScrollerTo(
+            scroller,
+            next,
+            prefersReducedMotion() ? 'instant' : 'smooth',
+          )
+          setActive(next)
+        }
       }),
     [],
   )
@@ -68,14 +95,7 @@ export function Library({ debug }: LibraryProps) {
   const handleScroll = () => {
     const scroller = scrollerRef.current
     if (!scroller || mode !== 'single') return
-    const children = Array.from(scroller.children) as HTMLElement[]
-    let nearest = 0
-    children.forEach((child, i) => {
-      const distance = Math.abs(child.offsetLeft - scroller.scrollLeft)
-      const best = Math.abs(children[nearest].offsetLeft - scroller.scrollLeft)
-      if (distance < best) nearest = i
-    })
-    setActive(nearest)
+    setActive(nearestIndex(scroller))
   }
 
   const openBookcase = (index: number) => {

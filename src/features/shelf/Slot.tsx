@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { useDrag } from '@/features/drag/dragStore'
 import type { Book } from '@/types/book'
 import type { SlotPosition } from '@/types/library'
 import { LIBRARY, VIEW, slotId } from './config'
@@ -8,6 +9,10 @@ type SlotProps = {
   position: SlotPosition
   book?: Book
   debug: boolean
+  /** Algum livro está sendo arrastado: os slots aparecem. */
+  dragging: boolean
+  /** Esta prateleira é o destino atual (e aceita o livro). */
+  isDropTarget: boolean
 }
 
 const CENTER = (LIBRARY.slotsPerShelf - 1) / 2
@@ -30,19 +35,35 @@ function perspectiveStyle({ shelf, slot }: SlotPosition): CSSProperties {
 
 /**
  * Um lugar para um livro. A proporção (2:11) é a de uma lombada grossa.
- * No modo debug, o slot vazio aparece pontilhado.
+ * - Vazio: pontilhado no modo debug ou durante um arraste ("os slots aparecem").
+ * - Destino do arraste: brilha onde o livro vai cair.
  */
-export function Slot({ position, book, debug }: SlotProps) {
-  const showOutline = debug && !book
+export function Slot({
+  position,
+  book,
+  debug,
+  dragging,
+  isDropTarget,
+}: SlotProps) {
+  const holdsDragged = useDrag(
+    (s) => !!book && s.active?.bookId === book.id && !s.dropping,
+  )
+
+  const outline = holdsDragged
+    ? isDropTarget
+      ? 'outline-2 -outline-offset-2 outline-ember bg-ember/15 shadow-[0_0_2.5cqw_rgb(232_180_90/0.45)]'
+      : ''
+    : !book && dragging
+      ? 'outline-1 -outline-offset-1 outline-parchment/45 outline-dashed'
+      : !book && debug
+        ? 'outline-1 -outline-offset-1 outline-parchment/25 outline-dashed'
+        : ''
+
   return (
     <div
       data-slot={slotId(position)}
       style={perspectiveStyle(position)}
-      className={`group relative flex aspect-[2/11] items-end justify-center rounded-[0.3cqw] ${
-        showOutline
-          ? 'outline-1 -outline-offset-1 outline-parchment/25 outline-dashed'
-          : ''
-      }`}
+      className={`group relative flex aspect-[2/11] items-end justify-center rounded-[0.3cqw] transition-[background-color,box-shadow] duration-150 ${outline}`}
     >
       {book && <ShelvedBook book={book} />}
     </div>
