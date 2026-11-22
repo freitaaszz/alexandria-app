@@ -1,7 +1,8 @@
-import { SpinePlaceholder } from '@/features/book/SpinePlaceholder'
+import type { CSSProperties } from 'react'
+import { Book3D } from '@/features/book/Book3D'
 import type { Book } from '@/types/book'
 import type { SlotPosition } from '@/types/library'
-import { slotId } from './config'
+import { LIBRARY, VIEW, slotId } from './config'
 
 type SlotProps = {
   position: SlotPosition
@@ -9,8 +10,26 @@ type SlotProps = {
   debug: boolean
 }
 
+const CENTER = (LIBRARY.slotsPerShelf - 1) / 2
+
 /**
- * Um lugar para um livro. A proporção (2:11) é a de uma lombada.
+ * Perspectiva de cada slot, apontada para o mesmo "olho" (centro da estante).
+ * Livros à esquerda do olho mostram um pouco da capa; à direita, da contracapa;
+ * nas prateleiras de baixo aparece o topo das páginas.
+ * A ordem de empilhamento faz o vizinho mais perto do centro cobrir a lateral.
+ */
+function perspectiveStyle({ shelf, slot }: SlotPosition): CSSProperties {
+  return {
+    perspective: VIEW.perspective,
+    perspectiveOrigin: `${50 + (CENTER - slot) * VIEW.slotPitch}% ${
+      50 + (VIEW.eyeShelf - shelf) * VIEW.shelfPitch
+    }%`,
+    zIndex: Math.round(LIBRARY.slotsPerShelf - Math.abs(slot - CENTER) * 2),
+  }
+}
+
+/**
+ * Um lugar para um livro. A proporção (2:11) é a de uma lombada grossa.
  * No modo debug, o slot vazio aparece pontilhado.
  */
 export function Slot({ position, book, debug }: SlotProps) {
@@ -18,13 +37,14 @@ export function Slot({ position, book, debug }: SlotProps) {
   return (
     <div
       data-slot={slotId(position)}
-      className={`aspect-[2/11] rounded-[0.3cqw] ${
+      style={perspectiveStyle(position)}
+      className={`group relative flex aspect-[2/11] items-end justify-center rounded-[0.3cqw] ${
         showOutline
           ? 'outline-1 -outline-offset-1 outline-parchment/25 outline-dashed'
           : ''
       }`}
     >
-      {book && <SpinePlaceholder book={book} />}
+      {book && <Book3D book={book} />}
     </div>
   )
 }

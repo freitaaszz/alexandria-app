@@ -29,11 +29,20 @@ export type ReadingDetails = {
   review?: string
 }
 
+/** Cores da lombada, extraídas da capa. */
+export type SpinePalette = {
+  base: string
+  accent: string
+  text: string
+}
+
 /** Um livro na estante. */
 export type Book = BookInfo &
   ReadingDetails & {
     /** Id local, único na biblioteca. */
     id: string
+    /** Calculado uma vez a partir da capa e guardado. */
+    spine?: SpinePalette
     /** Quando foi colocado na estante (ISO). */
     addedAt: string
     position: SlotPosition

@@ -28,8 +28,8 @@ export function Shelf({ bookcase, shelf, debug }: ShelfProps) {
           />
         ))}
       </div>
-      {/* Tábua da prateleira */}
-      <div className="h-[2.5cqw] bg-wood-700 shadow-[0_0.8cqw_1.2cqw_rgb(0_0_0/0.45)]" />
+      {/* Tábua da prateleira: fica na frente dos livros (z-index maior que o dos slots) */}
+      <div className="relative z-20 h-[2.5cqw] bg-wood-700 shadow-[0_0.8cqw_1.2cqw_rgb(0_0_0/0.45)]" />
     </div>
   )
 }

@@ -10,7 +10,7 @@ import {
   removeBook,
   type MoveResult,
 } from '@/lib/placement'
-import type { Book, BookInfo, BookPatch } from '@/types/book'
+import type { Book, BookInfo, BookPatch, SpinePalette } from '@/types/book'
 import type { SlotPosition } from '@/types/library'
 
 export type AddResult =
@@ -23,6 +23,8 @@ type LibraryState = {
   /** Edita os dados de leitura (data, nota, resenha, páginas). */
   updateBook: (id: string, patch: BookPatch) => void
   removeBook: (id: string) => void
+  /** Guarda as cores da lombada calculadas a partir da capa. */
+  setSpinePalette: (id: string, spine: SpinePalette) => void
   /** Move para uma posição; o resto da prateleira anda (ver lib/placement). */
   moveBook: (id: string, to: SlotPosition) => MoveResult<Book>
   /** Esvazia a biblioteca (usado nas ferramentas de desenvolvimento). */
@@ -74,6 +76,11 @@ export const useLibrary = create<LibraryState>()(
 
       removeBook: (id) =>
         set((state) => ({ books: removeBook(state.books, id) })),
+
+      setSpinePalette: (id, spine) =>
+        set((state) => ({
+          books: state.books.map((b) => (b.id === id ? { ...b, spine } : b)),
+        })),
 
       moveBook: (id, to) => {
         const result = moveBook(get().books, id, to)
