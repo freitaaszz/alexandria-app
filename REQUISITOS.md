@@ -30,6 +30,7 @@ Site de **uma única página**: uma biblioteca pessoal com **3 estantes** vazias
 - **3 estantes** fixas na página.
 - Começam **vazias**.
 - **4 prateleiras por estante**, com **17 slots por prateleira**. Cada livro ocupa 1 slot (68 livros por estante, 204 no total).
+  $L
 - **Celular:** uma estante por vez, deslizando para o lado, com um botão para **ver a biblioteca inteira** (as 3 estantes juntas, como no desktop). Tocar numa estante na visão geral leva até ela.
 - O formato visual das estantes e do cenário depende do tema escolhido (RF07).
 
@@ -132,5 +133,3 @@ Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
 2. Resolver as questões em aberto.
 3. Rodar o `/impeccable` para criar a direção visual e o design system (DESIGN.md) com base neste documento.
 4. Só então começar o código.
-
-- **Os livros ficam sempre juntos, a partir da esquerda** (sem buracos). Colocar um livro no meio faz o resto andar para a direita; tirar um faz os outros fecharem o espaço.
