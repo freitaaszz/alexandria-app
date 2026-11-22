@@ -30,7 +30,8 @@
 - [x] Configurar oxlint e Prettier (código padronizado)
 - [x] Definir a estrutura de pastas
 - [x] README inicial com a descrição do projeto
-- [ ] ~~Deploy automático (Vercel)~~ adiado: por enquanto só localhost (`npm run dev -- --host` para testar no celular)
+- [ ] ~~Deploy automático (Vercel)~~ adiado. **Ao publicar:** criar a regra de proxy `/capas/*` → `https://books.google.com/*` na plataforma (ver `vite.config.ts`), senão as lombadas ficam sem a cor da capa. Também adicionar o domínio nas restrições da chave da Google.
+  - Por enquanto só localhost (`npm run dev -- --host` para testar no celular).
 - **Pronto quando:** `npm run dev` mostra a página da Alexandria (no PC e no celular pela rede local).
 
 ### Etapa 1 — Estrutura das estantes (sem design final)
@@ -71,12 +72,12 @@
 
 **Objetivo:** o livro aparecer bonito na estante.
 
-- [ ] Extrair as cores dominantes da capa
-- [ ] Lombada com título e autor na vertical
-- [ ] Espessura de acordo com o número de páginas
-- [ ] Profundidade em CSS 3D, mostrando um pouco da capa e a borda das páginas
-- [ ] Sombra, brilho e textura sutil
-- [ ] Versão para livro sem capa (lombada padrão bonita)
+- [x] Extrair as cores dominantes da capa
+- [x] Lombada com título e autor na vertical
+- [x] Espessura de acordo com o número de páginas
+- [x] Profundidade em CSS 3D, mostrando um pouco da capa e a borda das páginas
+- [x] Sombra, brilho e textura sutil
+- [x] Versão para livro sem capa (lombada padrão bonita)
 - **Pronto quando:** livros diferentes geram lombadas diferentes e convincentes.
 
 ### Etapa 5 — Adicionar livro na estante
