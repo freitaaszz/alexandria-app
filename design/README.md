@@ -11,3 +11,4 @@ Arquivos de criação da cena 3D.
 | `renders/`                      | Imagens de referência da cena                                                    | Sim                          |
 
 Tudo que vem da Poly Haven é CC0 (domínio público): https://polyhaven.com
+As pinturas são obras de domínio público do Art Institute of Chicago (CC0): https://www.artic.edu/open-access
