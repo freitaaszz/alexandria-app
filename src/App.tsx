@@ -5,23 +5,29 @@ import { DevTools } from '@/features/dev/DevTools'
 import { DragAnnouncer, DragLayer } from '@/features/drag/DragLayer'
 import { SearchDialog } from '@/features/search/SearchDialog'
 import { Library } from '@/features/shelf/Library'
+import { CandlesBehind, CandlesFront } from '@/features/theme/FloatingCandles'
+import { SceneBackground } from '@/features/theme/SceneBackground'
 import { useUi } from '@/store/ui'
 
 export default function App() {
-  // Modo debug: mostra os slots vazios. Ligado por padrão enquanto não há design.
-  const [debug, setDebug] = useState(true)
+  // Modo debug: mostra os slots vazios (botão só no modo de desenvolvimento).
+  const [debug, setDebug] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   // Com o modal do livro aberto, o resto da página não recebe foco nem cliques.
   const modalOpen = useUi((s) => s.selectedBookId !== null)
 
   return (
     <>
+      <SceneBackground />
+      <CandlesBehind />
       <div
         inert={modalOpen}
-        className="flex min-h-dvh flex-col gap-4 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] lg:px-8"
+        className="relative z-10 flex min-h-dvh flex-col gap-4 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] lg:px-8"
       >
-        <header className="flex flex-wrap items-center justify-between gap-2">
-          <h1 className="font-display text-2xl tracking-wide lg:text-3xl">
+        {/* Velas da frente: acima das estantes, abaixo do cabeçalho e dos botões */}
+        <CandlesFront />
+        <header className="relative z-30 flex flex-wrap items-center justify-between gap-2">
+          <h1 className="bg-[linear-gradient(180deg,#f6e3ae,#c9993f_55%,#8f6526)] bg-clip-text font-display text-2xl font-semibold tracking-[0.12em] text-transparent drop-shadow-[0_2px_6px_rgb(0_0_0/0.8)] lg:text-3xl">
             Alexandria
           </h1>
           <div className="flex flex-wrap items-center justify-end gap-2">
@@ -31,7 +37,7 @@ export default function App() {
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="hidden min-h-11 rounded-full bg-ember px-5 font-medium text-wood-950 transition-transform active:scale-95 lg:inline-flex lg:items-center"
+              className="hidden min-h-11 rounded-full border border-[#f3d993]/40 bg-[linear-gradient(180deg,#e8c77d,#b98a3a)] px-5 font-display text-sm font-semibold tracking-wider text-wood-950 shadow-[0_4px_18px_rgb(227_180_98/0.25),inset_0_1px_0_rgb(255_255_255/0.4)] transition-transform active:scale-95 lg:inline-flex lg:items-center"
             >
               + Adicionar livro
             </button>
@@ -47,7 +53,7 @@ export default function App() {
           type="button"
           onClick={() => setSearchOpen(true)}
           aria-label="Adicionar livro"
-          className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-10 grid size-14 place-items-center rounded-full bg-ember text-3xl leading-none text-wood-950 shadow-lg shadow-black/40 transition-transform active:scale-90 lg:hidden"
+          className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 grid size-14 place-items-center rounded-full border border-[#f3d993]/40 bg-[linear-gradient(180deg,#e8c77d,#b98a3a)] text-3xl leading-none text-wood-950 shadow-lg shadow-black/40 transition-transform active:scale-90 lg:hidden"
         >
           +
         </button>

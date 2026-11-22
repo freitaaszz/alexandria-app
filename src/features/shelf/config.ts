@@ -14,10 +14,10 @@ export const LIBRARY = {
  * - slotPitch / shelfPitch: distância entre slots / prateleiras, em % do tamanho do slot.
  */
 export const VIEW = {
-  perspective: '260cqw',
+  perspective: '520cqw',
   eyeShelf: 1.5,
-  slotPitch: 108,
-  shelfPitch: 120,
+  slotPitch: 102,
+  shelfPitch: 121,
 } as const
 
 /** Gera [0, 1, ..., n-1] para renderizar listas de tamanho fixo. */

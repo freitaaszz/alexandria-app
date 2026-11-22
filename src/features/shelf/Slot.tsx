@@ -63,7 +63,7 @@ export function Slot({
     <div
       data-slot={slotId(position)}
       style={perspectiveStyle(position)}
-      className={`group relative flex aspect-[2/11] items-end justify-center rounded-[0.3cqw] transition-[background-color,box-shadow] duration-150 ${outline}`}
+      className={`group relative flex h-full items-end justify-center rounded-[0.3cqw] transition-[background-color,box-shadow] duration-150 ${outline}`}
     >
       {book && <ShelvedBook book={book} />}
     </div>

@@ -111,12 +111,12 @@ export function Library({ debug }: LibraryProps) {
   const isSingle = mode === 'single'
 
   return (
-    <div className="mx-auto flex w-full flex-1 flex-col gap-4 lg:max-w-[min(90rem,calc((100dvh-9rem)*1.8))] lg:justify-center">
+    <div className="mx-auto flex w-full flex-1 flex-col gap-4 lg:max-w-[min(92rem,calc((100dvh-8rem)*1.56))] lg:justify-center">
       {/* Alternar visualização (só no celular) */}
       <div
         role="group"
         aria-label="Visualização"
-        className="mx-auto flex rounded-full bg-wood-900 p-1 text-sm lg:hidden"
+        className="relative z-30 mx-auto flex rounded-full border border-gold/20 bg-black/45 p-1 text-sm backdrop-blur-md lg:hidden"
       >
         {(
           [
@@ -161,7 +161,7 @@ export function Library({ debug }: LibraryProps) {
                 className="w-full shrink-0 snap-start snap-always"
               >
                 {/* Limita a largura para a estante caber na altura da tela */}
-                <div className="mx-auto max-w-[calc((100dvh-12rem)*0.6)] lg:max-w-none">
+                <div className="mx-auto max-w-[calc((100dvh-12rem)*0.5)] lg:max-w-none">
                   <Bookcase index={index} debug={debug} />
                 </div>
               </div>

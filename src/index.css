@@ -1,17 +1,19 @@
 @import 'tailwindcss';
 
 /*
- * Tokens provisórios. O design real entra na etapa "primeiro-cenario",
- * onde cada tema vai sobrescrever estas variáveis.
+ * Tokens do tema "Escola de Magia".
+ * Fontes: Cinzel (títulos, letras de pedra gravada) e Cormorant Garamond (texto clássico).
  */
 @theme {
-  --color-wood-950: #1a120c;
-  --color-wood-900: #2a1d14;
-  --color-wood-700: #5a3e2b;
-  --color-parchment: #f3e9d7;
-  --color-ember: #e8b45a;
+  --color-wood-950: #120c08;
+  --color-wood-900: #21160f;
+  --color-wood-700: #4a3322;
+  --color-parchment: #f1e6cf;
+  --color-ember: #e3b462;
+  --color-gold: #d4a955;
 
-  --font-display: 'Georgia', 'Times New Roman', serif;
+  --font-display: 'Cinzel', 'Georgia', serif;
+  --font-serif: 'Cormorant Garamond', 'Georgia', serif;
 }
 
 @layer base {
@@ -23,11 +25,127 @@
 
   body {
     min-height: 100dvh;
-    background-color: var(--color-wood-950);
+    background-color: #080503;
     color: var(--color-parchment);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* Remove o "flash" azul ao tocar em elementos no celular */
     -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Velas flutuando (ver features/theme/FloatingCandles.tsx)
+ * ------------------------------------------------------------------------- */
+
+/* Atravessa a sala bem devagar */
+.candle-drift {
+  animation: candle-drift var(--drift-duration) linear var(--drift-delay)
+    infinite;
+  will-change: transform;
+}
+@keyframes candle-drift {
+  from {
+    transform: translateX(var(--drift-from));
+  }
+  to {
+    transform: translateX(var(--drift-to));
+  }
+}
+
+/* Flutua para cima e para baixo, com uma leve inclinação */
+.candle-bob {
+  animation: candle-bob var(--bob-duration) ease-in-out infinite alternate;
+}
+@keyframes candle-bob {
+  from {
+    transform: translateY(-0.6rem) rotate(-2deg);
+  }
+  to {
+    transform: translateY(0.6rem) rotate(2deg);
+  }
+}
+
+/* Chama em gota: núcleo claro, borda laranja, tremulando */
+.candle-flame {
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(
+    60% 55% at 50% 72%,
+    #fffbe8 0%,
+    #ffe08a 28%,
+    #ff9a2e 62%,
+    rgb(255 90 20 / 0) 100%
+  );
+  filter: blur(0.4px);
+  transform-origin: 50% 90%;
+  animation: candle-flicker var(--flicker-duration) ease-in-out infinite;
+}
+@keyframes candle-flicker {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1, 1) skewX(0deg);
+    opacity: 1;
+  }
+  20% {
+    transform: translateX(-50%) scale(0.94, 1.08) skewX(-3deg);
+  }
+  45% {
+    transform: translateX(-50%) scale(1.04, 0.95) skewX(2deg);
+    opacity: 0.92;
+  }
+  70% {
+    transform: translateX(-50%) scale(0.97, 1.05) skewX(-1deg);
+  }
+}
+
+/* Halo de luz quente */
+.candle-glow {
+  background: radial-gradient(
+    closest-side,
+    rgb(255 190 110 / 0.55),
+    rgb(255 140 60 / 0.18) 45%,
+    transparent
+  );
+  mix-blend-mode: screen;
+  animation: candle-glow var(--flicker-duration) ease-in-out infinite;
+}
+@keyframes candle-glow {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Luz geral da sala, respirando devagar */
+.scene-flicker {
+  animation: scene-flicker 7s ease-in-out infinite;
+}
+@keyframes scene-flicker {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  30% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.88;
+  }
+  80% {
+    opacity: 0.97;
+  }
+}
+
+/* Quem pediu menos movimento: tudo parado (cada vela fica onde estava). */
+@media (prefers-reduced-motion: reduce) {
+  .candle-drift,
+  .candle-bob,
+  .candle-flame,
+  .candle-glow,
+  .scene-flicker {
+    animation-play-state: paused;
   }
 }

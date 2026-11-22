@@ -30,3 +30,6 @@ dist-ssr
 
 # Vercel
 .vercel
+
+# Texturas baixadas (Poly Haven, CC0) usadas só no Blender
+design/texturas/
