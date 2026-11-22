@@ -135,7 +135,7 @@ Sub-etapas 3D (uma branch por sub-etapa):
 - [x] **8.1 `prova-3d`**: estante com luz assada + 204 livros 3D no navegador, medindo o desempenho no desktop. **Resultado: 240 FPS** (limite da tela) com 3 estantes e 204 livros na RTX 5060, 1440×900. Abre em `/?3d`.
 - [ ] **8.2 `sala-3d`**: a sala completa no Blender (estantes em arco na parede do fundo, paredes laterais com quadros, lanternas, trepadeiras, tapete, baú), luz assada e exportação otimizada (glTF comprimido)
 - [ ] **8.3 `livros-3d`**: livros como objetos 3D com a lombada gerada da capa (cor, título, espessura)
-- [ ] **8.4 `camera-3d`**: câmera que vai da sala inteira até uma estante, troca entre estantes e tem leve parallax com o mouse
+- [ ] **8.4 `camera-3d`**: câmera **fixa** (a pessoa não anda nem gira pela sala); só se mexe de leve acompanhando o mouse (parallax). Movimentos maiores são só os do próprio site: aproximar uma estante e trocar entre estantes
 - [ ] **8.5 `interacao-3d`**: clicar no livro abre o modal; arrastar o livro em 3D (puxa da estante e segue o mouse); voo da busca até a prateleira
 - [ ] **8.6 `atmosfera-3d`**: velas flutuando com luz de verdade, poeira na luz, névoa e pós-processamento (brilho, vinheta, profundidade de campo)
 - **Pronto quando:** a sala está no nível da referência e roda liso no desktop.

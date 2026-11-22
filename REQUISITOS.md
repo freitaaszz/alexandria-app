@@ -114,6 +114,7 @@ Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
   - **Lanternas e velas** penduradas no alto da parede do fundo; **trepadeiras e plantas** caindo dos cantos do teto.
   - **Tapete** no chão, um **móvel/baú** em primeiro plano à esquerda, livros e objetos espalhados.
   - No celular, a "câmera" aproxima uma estante por vez e desliza entre elas; "Biblioteca inteira" mostra a sala toda.
+  - **Câmera fixa:** a pessoa não anda nem gira pela sala. A câmera só se mexe de leve acompanhando o mouse (parallax, dá profundidade). Movimentos maiores acontecem só pelo site (ex.: aproximar uma estante).
 - **Estética geral: realista, com cara de jogo de verdade** (prioridade máxima do projeto: "a estética vai ser tudo").
   - Nada de visual de desenho ou cartoon chapado: **texturas, iluminação e sombras reais**, como um objeto 3D de jogo. Referência: o cavalo 3D da página https://integra.arsenalpages.com/componentes/pagina-limiar-estudio-digital
   - **A luz e o clima vêm do cenário:** cada tema muda a iluminação, a cor da luz e as sombras das estantes e dos livros.
