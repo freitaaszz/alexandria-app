@@ -132,3 +132,5 @@ Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
 2. Resolver as questões em aberto.
 3. Rodar o `/impeccable` para criar a direção visual e o design system (DESIGN.md) com base neste documento.
 4. Só então começar o código.
+
+- **Os livros ficam sempre juntos, a partir da esquerda** (sem buracos). Colocar um livro no meio faz o resto andar para a direita; tirar um faz os outros fecharem o espaço.

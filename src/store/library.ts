@@ -6,6 +6,8 @@ import {
   findFirstFreeSlot,
   isInBounds,
   moveBook,
+  normalize,
+  removeBook,
   type MoveResult,
 } from '@/lib/placement'
 import type { Book, BookInfo, BookPatch } from '@/types/book'
@@ -21,7 +23,7 @@ type LibraryState = {
   /** Edita os dados de leitura (data, nota, resenha, páginas). */
   updateBook: (id: string, patch: BookPatch) => void
   removeBook: (id: string) => void
-  /** Move para um slot, empurrando os vizinhos se precisar (ver lib/placement). */
+  /** Move para uma posição; o resto da prateleira anda (ver lib/placement). */
   moveBook: (id: string, to: SlotPosition) => MoveResult<Book>
   /** Esvazia a biblioteca (usado nas ferramentas de desenvolvimento). */
   clear: () => void
@@ -71,7 +73,7 @@ export const useLibrary = create<LibraryState>()(
         })),
 
       removeBook: (id) =>
-        set((state) => ({ books: state.books.filter((b) => b.id !== id) })),
+        set((state) => ({ books: removeBook(state.books, id) })),
 
       moveBook: (id, to) => {
         const result = moveBook(get().books, id, to)
@@ -90,7 +92,11 @@ export const useLibrary = create<LibraryState>()(
       merge: (persisted, current) => {
         const saved = (persisted as Partial<LibraryState> | undefined)?.books
         const books = Array.isArray(saved)
-          ? saved.filter((b) => b?.id && b.position && isInBounds(b.position))
+          ? normalize(
+              saved.filter(
+                (b) => b?.id && b.position && isInBounds(b.position),
+              ),
+            )
           : []
         return { ...current, books }
       },
