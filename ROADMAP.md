@@ -108,15 +108,15 @@
 
 **Objetivo:** o livro sai da estante e segue o dedo ou o mouse.
 
-- [ ] Configurar o dnd-kit (mouse, toque e teclado)
-- [ ] Livro "na mão": sai da estante, levanta, a sombra cresce e ele segue o ponteiro
-- [ ] Física: inclina de acordo com a velocidade e a direção do arraste (mola)
-- [ ] Slots aparecem durante o arraste e os vizinhos se afastam
-- [ ] Mover dentro da prateleira, entre prateleiras e entre estantes
-- [ ] Encaixe com mola ao soltar; volta para o lugar se soltar fora de um slot
-- [ ] Bloqueio e feedback quando a prateleira está cheia
-- [ ] Celular: toque longo para pegar, vibração no Android, rolagem automática nas bordas
-- [ ] Diferenciar "clique" (abre o modal) de "segurar" (arrasta)
+- [x] Motor de arrastar próprio (mouse, toque e teclado), sem biblioteca: controle total da física
+- [x] Livro "na mão": sai da estante, levanta, a sombra cresce e ele segue o ponteiro
+- [x] Física: inclina de acordo com a velocidade e a direção do arraste (mola)
+- [x] Slots aparecem durante o arraste e os vizinhos se afastam
+- [x] Mover dentro da prateleira, entre prateleiras e entre estantes
+- [x] Encaixe com mola ao soltar; volta para o lugar se soltar fora de um slot
+- [x] Bloqueio e feedback quando a prateleira está cheia
+- [x] Celular: toque longo para pegar, vibração no Android, rolagem automática nas bordas
+- [x] Diferenciar "clique" (abre o modal) de "segurar" (arrasta)
 - **Pronto quando:** arrastar no celular for tão gostoso quanto no desktop.
 
 ### Etapa 8 — Primeiro cenário completo

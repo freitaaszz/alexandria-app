@@ -130,7 +130,7 @@ Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
    - (b) livros muito grossos ocupam 2 slots.
 3. ~~Quantas prateleiras por estante?~~ **Decidido:** 4 prateleiras.
 4. **Desejos:** ficam numa das 3 estantes (ex.: a estante da direita é a de desejos) ou se misturam com os lidos, diferenciados visualmente?
-5. ~~Celular: como mostrar as estantes?~~ **Decidido:** uma por vez deslizando, com opção de ver tudo. **Ainda em aberto:** como arrastar um livro de uma estante para outra no celular (resolver na etapa arrastar-livro).
+5. ~~Celular: como mostrar as estantes?~~ **Decidido:** uma por vez deslizando, com opção de ver tudo. Para levar um livro a outra estante no celular: arrastar até a borda da tela e esperar um instante, que a tela desliza para a estante vizinha.
 6. **Temas:** qual será o **primeiro cenário** (floresta ou um dos inspirados em livros)? Lista completa e designs pendentes.
 7. **Livro repetido:** pode adicionar o mesmo livro duas vezes?
 
