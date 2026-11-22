@@ -12,32 +12,35 @@ Site de **uma única página**: uma biblioteca pessoal com **3 estantes** vazias
 
 ## 2. Stack definida
 
-| Camada | Escolha | Motivo |
-|---|---|---|
-| Base | React + Vite | Ecossistema grande, rápido, reaproveitável para um app (Capacitor ou React Native/Expo) |
-| Linguagem | TypeScript | Segurança e escalabilidade |
-| Estilo | Tailwind CSS (CSS mobile-first) | Responsividade simples |
-| Animações de interface | Motion (Framer Motion) | Molas, gestos, modal, livro seguindo o ponteiro |
-| Animações de cenário | GSAP e/ou Canvas | Vagalumes, árvores balançando, ambientação |
-| Arrastar e soltar | dnd-kit | Mouse, toque e teclado, com overlay customizado |
-| API de livros | **Google Books API** | Melhor acervo em português, com páginas, capa, autor e sinopse |
-| Lombada/3D | CSS 3D (sem Three.js nos livros) | Leve no celular e fácil de arrastar |
+| Camada                 | Escolha                          | Motivo                                                                                  |
+| ---------------------- | -------------------------------- | --------------------------------------------------------------------------------------- |
+| Base                   | React + Vite                     | Ecossistema grande, rápido, reaproveitável para um app (Capacitor ou React Native/Expo) |
+| Linguagem              | TypeScript                       | Segurança e escalabilidade                                                              |
+| Estilo                 | Tailwind CSS (CSS mobile-first)  | Responsividade simples                                                                  |
+| Animações de interface | Motion (Framer Motion)           | Molas, gestos, modal, livro seguindo o ponteiro                                         |
+| Animações de cenário   | GSAP e/ou Canvas                 | Vagalumes, árvores balançando, ambientação                                              |
+| Arrastar e soltar      | dnd-kit                          | Mouse, toque e teclado, com overlay customizado                                         |
+| API de livros          | **Google Books API**             | Melhor acervo em português, com páginas, capa, autor e sinopse                          |
+| Lombada/3D             | CSS 3D (sem Three.js nos livros) | Leve no celular e fácil de arrastar                                                     |
 
 ## 3. Requisitos funcionais
 
 ### RF01 — Estantes
+
 - **3 estantes** fixas na página.
 - Começam **vazias**.
 - **17 slots por prateleira.** Cada livro ocupa 1 slot.
 - O formato visual das estantes e do cenário depende do tema escolhido (RF07).
 
 ### RF02 — Buscar e adicionar livro
+
 - Busca por **nome do livro** (e autor) usando a **Google Books API**.
 - Lista de resultados com capa, título e autor.
 - Ao escolher um livro, a pessoa define se ele é **lido** ou **desejo** (quero ler).
 - O livro é adicionado à estante **com animação**: ele "voa" e entra no slot.
 
 ### RF03 — Lombada gerada a partir da capa
+
 - Não existe API gratuita com imagens de lombada, então a lombada é **gerada automaticamente**:
   - **Cor** extraída das cores dominantes da capa.
   - **Título e autor** na vertical, com tipografia de lombada.
@@ -48,6 +51,7 @@ Site de **uma única página**: uma biblioteca pessoal com **3 estantes** vazias
 - Futuro opcional: a pessoa envia uma foto da lombada real.
 
 ### RF04 — Pegar e mover o livro (requisito crítico)
+
 - A pessoa **segura o livro** (clicar e segurar no desktop, toque longo no celular).
 - O livro **sai literalmente da estante** e **acompanha o ponteiro ou o dedo**, sempre visível enquanto é arrastado:
   - levanta, inclina e a sombra cresce, como se estivesse sendo segurado;
@@ -64,7 +68,9 @@ Site de **uma única página**: uma biblioteca pessoal com **3 estantes** vazias
 - No celular, o toque longo evita conflito com a rolagem da tela. No Android há vibração leve ao pegar o livro, quando suportada.
 
 ### RF05 — Modal de informações do livro
+
 Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
+
 - Capa, título, autor e sinopse (vindos da API).
 - **Número de páginas**: vem da API e pode ser editado, porque às vezes falta.
 - **Data em que foi lido**, preenchida pela pessoa (só para livros lidos).
@@ -74,6 +80,7 @@ Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
 - Botão para **remover o livro** da estante.
 
 ### RF06 — Estante de desejos (livros não lidos) — **fase posterior**
+
 > Só será feita **depois que a estante normal estiver pronta**. Até lá, a estante só tem livros lidos.
 
 - Além dos livros lidos, a pessoa pode adicionar **livros que deseja ler**.
@@ -81,6 +88,7 @@ Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
 - O formato está em aberto (ver questões em aberto).
 
 ### RF07 — Temas de cenário
+
 - Vários temas selecionáveis. **Cada tema muda o fundo, as estantes e o cenário inteiro.**
 - Os temas podem ter **ambientação animada**. Exemplo:
   - **Floresta:** vagalumes voando, árvores balançando ao fundo.

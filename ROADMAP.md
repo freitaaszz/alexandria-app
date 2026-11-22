@@ -6,7 +6,7 @@
 
 ## Como vamos trabalhar no GitHub
 
-- Uma **branch por etapa**, por exemplo `etapa-01/estrutura-estantes`, com um **Pull Request** para a `main` no final.
+- Uma **branch por etapa**, com o nome da etapa: `fundacao`, `estrutura-estantes`, `dados-salvamento`, `busca-google-books`, `lombada`, `adicionar-livro`, `modal-livro`, `arrastar-livro`, `primeiro-cenario`, `polimento`. No final de cada etapa, um **Pull Request** para a `main`.
 - Commits pequenos, no padrão **Conventional Commits**:
   - `feat:` funcionalidade nova, por exemplo `feat: busca de livros na Google Books`
   - `fix:` correção
@@ -21,18 +21,22 @@
 ## FASE 1 — v1: a estante funcionando (só livros lidos)
 
 ### Etapa 0 — Fundação do projeto
+
 **Objetivo:** projeto criado, rodando e publicado online (ainda vazio).
-- [ ] Criar o repositório no GitHub (você)
-- [ ] Criar o projeto com Vite + React + TypeScript
-- [ ] Configurar Tailwind CSS (mobile-first)
-- [ ] Configurar ESLint e Prettier (código padronizado)
-- [ ] Definir a estrutura de pastas
-- [ ] README inicial com a descrição do projeto
+
+- [x] Criar o repositório no GitHub (você)
+- [x] Criar o projeto com Vite + React + TypeScript
+- [x] Configurar Tailwind CSS (mobile-first)
+- [x] Configurar oxlint e Prettier (código padronizado)
+- [x] Definir a estrutura de pastas
+- [x] README inicial com a descrição do projeto
 - [ ] Deploy automático (Vercel) para abrir no celular
 - **Pronto quando:** abrir o link no celular e ver a página "Biblioteca" no ar.
 
 ### Etapa 1 — Estrutura das estantes (sem design final)
+
 **Objetivo:** as 3 estantes com prateleiras e slots, em versão "rascunho".
+
 - [ ] Layout das 3 estantes no desktop
 - [ ] Prateleiras com 17 slots cada
 - [ ] Layout no celular (navegação entre estantes)
@@ -41,7 +45,9 @@
 - **Depende de decidir:** quantas prateleiras por estante e como fica no celular.
 
 ### Etapa 2 — Dados e salvamento
+
 **Objetivo:** o "cérebro" da estante, onde cada livro guarda seus dados e sua posição.
+
 - [ ] Definir o modelo do livro (título, autor, capa, páginas, data, nota, resenha, posição)
 - [ ] Gerenciador de estado da estante (Zustand)
 - [ ] Salvamento no aparelho (localStorage), sobrevivendo a fechar a aba
@@ -49,7 +55,9 @@
 - **Pronto quando:** livros de teste aparecem nos slots e continuam lá depois de recarregar a página.
 
 ### Etapa 3 — Busca na Google Books API
+
 **Objetivo:** pesquisar qualquer livro.
+
 - [ ] Criar a chave da API no Google Cloud (você, com o meu passo a passo)
 - [ ] Proteger a chave (variável de ambiente)
 - [ ] Campo de busca com espera enquanto digita (debounce)
@@ -58,7 +66,9 @@
 - **Pronto quando:** digitar "Corte de Espinhos e Rosas" e ver o livro certo na lista.
 
 ### Etapa 4 — Lombada gerada a partir da capa
+
 **Objetivo:** o livro aparecer bonito na estante.
+
 - [ ] Extrair as cores dominantes da capa
 - [ ] Lombada com título e autor na vertical
 - [ ] Espessura de acordo com o número de páginas
@@ -68,7 +78,9 @@
 - **Pronto quando:** livros diferentes geram lombadas diferentes e convincentes.
 
 ### Etapa 5 — Adicionar livro na estante
+
 **Objetivo:** fluxo completo de busca até a estante.
+
 - [ ] Botão de "adicionar livro" que abre a busca
 - [ ] Escolher o livro e colocá-lo no primeiro slot livre
 - [ ] Animação do livro entrando na estante
@@ -76,7 +88,9 @@
 - **Pronto quando:** pesquisar, adicionar e ver o livro entrar animado na estante.
 
 ### Etapa 6 — Modal do livro
+
 **Objetivo:** ver e editar as informações do livro.
+
 - [ ] Abrir o modal ao clicar ou tocar no livro
 - [ ] Mostrar capa, título, autor e sinopse
 - [ ] Número de páginas editável
@@ -88,7 +102,9 @@
 - **Pronto quando:** dá para editar tudo, fechar, recarregar e as informações continuarem salvas.
 
 ### Etapa 7 — Pegar e arrastar o livro (a estrela do projeto)
+
 **Objetivo:** o livro sai da estante e segue o dedo ou o mouse.
+
 - [ ] Configurar o dnd-kit (mouse, toque e teclado)
 - [ ] Livro "na mão": sai da estante, levanta, a sombra cresce e ele segue o ponteiro
 - [ ] Física: inclina de acordo com a velocidade e a direção do arraste (mola)
@@ -101,7 +117,9 @@
 - **Pronto quando:** arrastar no celular for tão gostoso quanto no desktop.
 
 ### Etapa 8 — Primeiro cenário completo
+
 **Objetivo:** aplicar o design real com um tema.
+
 - [ ] Sistema de temas (cada tema define fundo, estantes, cenário e cores)
 - [ ] Design das estantes do tema
 - [ ] Fundo e cenário do tema
@@ -111,6 +129,7 @@
 - **Depende de:** design escolhido por você.
 
 ### Etapa 9 — Polimento, celular e acessibilidade
+
 - [ ] Teste em celulares reais (iPhone e Android)
 - [ ] Ajustes de toque: áreas de toque, sem zoom indesejado, área segura do notch
 - [ ] Respeitar "reduzir movimento" do aparelho
@@ -119,6 +138,7 @@
 - **Pronto quando:** dá para usar no celular sem nenhum atrito.
 
 ### Etapa 10 — Lançamento da v1 🎉
+
 - [ ] Revisão geral
 - [ ] README final com prints e GIF
 - [ ] Tag `v1.0.0` no GitHub
@@ -126,6 +146,7 @@
 ---
 
 ## FASE 2 — Depois da v1 (ordem a definir)
+
 - [ ] Estante de desejos (livros não lidos)
 - [ ] Mais cenários (Escola de Magia, Acampamento Mitológico, Corte das Fadas…)
 - [ ] Som ambiente
@@ -138,11 +159,12 @@
 ---
 
 ## Decisões pendentes (antes da etapa indicada)
-| Decisão | Necessária antes de | Sugestão |
-|---|---|---|
-| Quantas prateleiras por estante | Etapa 1 | 4 (68 livros por estante, 204 no total) |
-| Navegação das estantes no celular | Etapa 1 | Uma estante por vez, deslizando para o lado |
-| Onde salvar | Etapa 2 | No aparelho na v1, nuvem na fase 2 |
-| Espessura × slots fixos | Etapa 4 | Espessura só visual dentro do slot |
-| Livro repetido permitido? | Etapa 5 | Não, com aviso de "já está na estante" |
-| Primeiro cenário e design | Etapa 8 | Sua escolha |
+
+| Decisão                           | Necessária antes de | Sugestão                                    |
+| --------------------------------- | ------------------- | ------------------------------------------- |
+| Quantas prateleiras por estante   | Etapa 1             | 4 (68 livros por estante, 204 no total)     |
+| Navegação das estantes no celular | Etapa 1             | Uma estante por vez, deslizando para o lado |
+| Onde salvar                       | Etapa 2             | No aparelho na v1, nuvem na fase 2          |
+| Espessura × slots fixos           | Etapa 4             | Espessura só visual dentro do slot          |
+| Livro repetido permitido?         | Etapa 5             | Não, com aviso de "já está na estante"      |
+| Primeiro cenário e design         | Etapa 8             | Sua escolha                                 |
