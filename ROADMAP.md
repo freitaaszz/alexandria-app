@@ -119,18 +119,30 @@
 - [x] Diferenciar "clique" (abre o modal) de "segurar" (arrasta)
 - **Pronto quando:** arrastar no celular for tão gostoso quanto no desktop.
 
-### Etapa 8 — Primeiro cenário completo
+### Etapa 8 — Primeiro cenário: Alexandria em 3D de verdade (desktop)
 
-**Objetivo:** aplicar o design real com um tema.
+**Decisão (2026-11-22):** o cenário passa a ser uma **sala 3D rodando no navegador** (Three.js / React Three Fiber), como a referência da arena: câmera cinematográfica voando até as estantes, livros 3D e luz "assada" no Blender. Dados, busca, modal e regras continuam; a parte visual das estantes, dos livros e do arrastar é refeita em 3D.
 
-- [ ] Sistema de temas (cada tema define fundo, estantes, cenário e cores)
-- [ ] Acabamento "cara de jogo": sombras, luz, profundidade e tudo bem suave e realista (ver referências no REQUISITOS)
-- [ ] Design das estantes do tema
-- [ ] Fundo e cenário do tema
-- [ ] Ambientação animada (ex.: vagalumes, árvores balançando)
-- [ ] Animações pausam quando a aba fica oculta
-- **Pronto quando:** o cenário está lindo e leve no celular.
-- **Depende de:** design escolhido por você.
+**Foco: 100% desktop.** O celular vira uma etapa própria depois.
+
+Já feito (base que continua valendo):
+
+- [x] Estante modelada no Blender (arco Tudor, colunas, nogueira escura, latão) em `design/blender/escola-de-magia.blend`
+- [x] Fundo de castelo, vela e lombadas de couro (versão em imagem, branch `primeiro-cenario`)
+
+Sub-etapas 3D (uma branch por sub-etapa):
+
+- [ ] **8.1 `prova-3d`**: estante com luz assada + 204 livros 3D no navegador, medindo o desempenho no desktop
+- [ ] **8.2 `sala-3d`**: a sala completa no Blender (estantes em arco na parede do fundo, paredes laterais com quadros, lanternas, trepadeiras, tapete, baú), luz assada e exportação otimizada (glTF comprimido)
+- [ ] **8.3 `livros-3d`**: livros como objetos 3D com a lombada gerada da capa (cor, título, espessura)
+- [ ] **8.4 `camera-3d`**: câmera que vai da sala inteira até uma estante, troca entre estantes e tem leve parallax com o mouse
+- [ ] **8.5 `interacao-3d`**: clicar no livro abre o modal; arrastar o livro em 3D (puxa da estante e segue o mouse); voo da busca até a prateleira
+- [ ] **8.6 `atmosfera-3d`**: velas flutuando com luz de verdade, poeira na luz, névoa e pós-processamento (brilho, vinheta, profundidade de campo)
+- **Pronto quando:** a sala está no nível da referência e roda liso no desktop.
+
+### Etapa 8.7 — Celular (depois do desktop pronto)
+
+- [ ] Adaptar a sala 3D para o celular: câmera, toque, desempenho e teste em aparelho real
 
 ### Etapa 9 — Polimento, celular e acessibilidade
 
