@@ -94,14 +94,14 @@
 
 **Objetivo:** ver e editar as informações do livro.
 
-- [ ] Abrir o modal ao clicar ou tocar no livro
-- [ ] Mostrar capa, título, autor e sinopse
-- [ ] Número de páginas editável
-- [ ] Data de leitura
-- [ ] Nota com 5 estrelas
-- [ ] Campo de resenha
-- [ ] Remover o livro, com confirmação
-- [ ] Animação de abrir e fechar; no celular, vira uma "folha" que sobe de baixo
+- [x] Abrir o modal ao clicar ou tocar no livro
+- [x] Mostrar capa, título, autor e sinopse
+- [x] Número de páginas editável
+- [x] Data de leitura
+- [x] Nota com 5 estrelas
+- [x] Campo de resenha
+- [x] Remover o livro, com confirmação
+- [x] Animação de abrir e fechar; no celular, vira uma "folha" que sobe de baixo
 - **Pronto quando:** dá para editar tudo, fechar, recarregar e as informações continuarem salvas.
 
 ### Etapa 7 — Pegar e arrastar o livro (a estrela do projeto)
