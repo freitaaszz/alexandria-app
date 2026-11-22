@@ -1,0 +1,33 @@
+@import 'tailwindcss';
+
+/*
+ * Tokens provisórios. O design real entra na etapa "primeiro-cenario",
+ * onde cada tema vai sobrescrever estas variáveis.
+ */
+@theme {
+  --color-wood-950: #1a120c;
+  --color-wood-900: #2a1d14;
+  --color-wood-700: #5a3e2b;
+  --color-parchment: #f3e9d7;
+  --color-ember: #e8b45a;
+
+  --font-display: 'Georgia', 'Times New Roman', serif;
+}
+
+@layer base {
+  html {
+    /* Evita que o iOS aumente a fonte ao girar o celular */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    background-color: var(--color-wood-950);
+    color: var(--color-parchment);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Remove o "flash" azul ao tocar em elementos no celular */
+    -webkit-tap-highlight-color: transparent;
+  }
+}
