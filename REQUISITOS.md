@@ -12,16 +12,17 @@ Site de **uma única página**: uma biblioteca pessoal com **3 estantes** vazias
 
 ## 2. Stack definida
 
-| Camada                 | Escolha                          | Motivo                                                                                  |
-| ---------------------- | -------------------------------- | --------------------------------------------------------------------------------------- |
-| Base                   | React + Vite                     | Ecossistema grande, rápido, reaproveitável para um app (Capacitor ou React Native/Expo) |
-| Linguagem              | TypeScript                       | Segurança e escalabilidade                                                              |
-| Estilo                 | Tailwind CSS (CSS mobile-first)  | Responsividade simples                                                                  |
-| Animações de interface | Motion (Framer Motion)           | Molas, gestos, modal, livro seguindo o ponteiro                                         |
-| Animações de cenário   | GSAP e/ou Canvas                 | Vagalumes, árvores balançando, ambientação                                              |
-| Arrastar e soltar      | dnd-kit                          | Mouse, toque e teclado, com overlay customizado                                         |
-| API de livros          | **Google Books API**             | Melhor acervo em português, com páginas, capa, autor e sinopse                          |
-| Lombada/3D             | CSS 3D (sem Three.js nos livros) | Leve no celular e fácil de arrastar                                                     |
+| Camada                 | Escolha                                                   | Motivo                                                                                                           |
+| ---------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Base                   | React + Vite                                              | Ecossistema grande, rápido, reaproveitável para um app (Capacitor ou React Native/Expo)                          |
+| Linguagem              | TypeScript                                                | Segurança e escalabilidade                                                                                       |
+| Estilo                 | Tailwind CSS (CSS mobile-first)                           | Responsividade simples                                                                                           |
+| Animações de interface | Motion (Framer Motion)                                    | Molas, gestos, modal, livro seguindo o ponteiro                                                                  |
+| Animações de cenário   | GSAP e/ou Canvas                                          | Vagalumes, árvores balançando, ambientação                                                                       |
+| Arrastar e soltar      | dnd-kit                                                   | Mouse, toque e teclado, com overlay customizado                                                                  |
+| API de livros          | **Google Books API**                                      | Melhor acervo em português, com páginas, capa, autor e sinopse                                                   |
+| Cena 3D                | **Three.js + React Three Fiber** (decidido em 2026-11-22) | Sala 3D no navegador com câmera cinematográfica, no nível da referência; luz "assada" no Blender para ficar leve |
+| Modelagem              | Blender + texturas/modelos CC0 da Poly Haven              | Realismo: madeira, pedra, luz e sombras de verdade                                                               |
 
 ## 3. Requisitos funcionais
 
