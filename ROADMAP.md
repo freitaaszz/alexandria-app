@@ -37,10 +37,11 @@
 
 **Objetivo:** as 3 estantes com prateleiras e slots, em versão "rascunho".
 
-- [ ] Layout das 3 estantes no desktop
-- [ ] Prateleiras com 17 slots cada
-- [ ] Layout no celular (navegação entre estantes)
-- [ ] Slots vazios visíveis (modo debug)
+- [x] Layout das 3 estantes no desktop
+- [x] Prateleiras com 17 slots cada
+- [x] Layout no celular: uma estante por vez, deslizando
+- [x] Botão "ver biblioteca inteira" no celular (tocar numa estante leva até ela)
+- [x] Slots vazios visíveis (modo debug)
 - **Pronto quando:** dá para ver a grade de slots no desktop e no celular.
 - **Depende de decidir:** quantas prateleiras por estante e como fica no celular.
 
@@ -160,11 +161,11 @@
 
 ## Decisões pendentes (antes da etapa indicada)
 
-| Decisão                           | Necessária antes de | Sugestão                                    |
-| --------------------------------- | ------------------- | ------------------------------------------- |
-| Quantas prateleiras por estante   | Etapa 1             | 4 (68 livros por estante, 204 no total)     |
-| Navegação das estantes no celular | Etapa 1             | Uma estante por vez, deslizando para o lado |
-| Onde salvar                       | Etapa 2             | No aparelho na v1, nuvem na fase 2          |
-| Espessura × slots fixos           | Etapa 4             | Espessura só visual dentro do slot          |
-| Livro repetido permitido?         | Etapa 5             | Não, com aviso de "já está na estante"      |
-| Primeiro cenário e design         | Etapa 8             | Sua escolha                                 |
+| Decisão                               | Necessária antes de | Sugestão                                     |
+| ------------------------------------- | ------------------- | -------------------------------------------- |
+| ~~Quantas prateleiras por estante~~   | Etapa 1             | ✅ 4 (68 por estante, 204 no total)          |
+| ~~Navegação das estantes no celular~~ | Etapa 1             | ✅ Uma por vez deslizando + botão "ver tudo" |
+| Onde salvar                           | Etapa 2             | No aparelho na v1, nuvem na fase 2           |
+| Espessura × slots fixos               | Etapa 4             | Espessura só visual dentro do slot           |
+| Livro repetido permitido?             | Etapa 5             | Não, com aviso de "já está na estante"       |
+| Primeiro cenário e design             | Etapa 8             | Sua escolha                                  |

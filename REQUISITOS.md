@@ -29,7 +29,8 @@ Site de **uma única página**: uma biblioteca pessoal com **3 estantes** vazias
 
 - **3 estantes** fixas na página.
 - Começam **vazias**.
-- **17 slots por prateleira.** Cada livro ocupa 1 slot.
+- **4 prateleiras por estante**, com **17 slots por prateleira**. Cada livro ocupa 1 slot (68 livros por estante, 204 no total).
+- **Celular:** uma estante por vez, deslizando para o lado, com um botão para **ver a biblioteca inteira** (as 3 estantes juntas, como no desktop). Tocar numa estante na visão geral leva até ela.
 - O formato visual das estantes e do cenário depende do tema escolhido (RF07).
 
 ### RF02 — Buscar e adicionar livro
@@ -116,9 +117,9 @@ Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
 2. **Espessura com slots fixos:** com 17 slots iguais, um livro grosso ocupa o mesmo espaço que um fino? Opções:
    - (a) todos os slots têm a mesma largura e a espessura varia só visualmente dentro dela;
    - (b) livros muito grossos ocupam 2 slots.
-3. **Quantas prateleiras por estante?** Isso define a capacidade total (ex.: 4 prateleiras × 17 = 68 livros por estante).
+3. ~~Quantas prateleiras por estante?~~ **Decidido:** 4 prateleiras.
 4. **Desejos:** ficam numa das 3 estantes (ex.: a estante da direita é a de desejos) ou se misturam com os lidos, diferenciados visualmente?
-5. **Celular:** como mostrar 3 estantes com 17 slots por prateleira numa tela pequena? Deslizar entre estantes (uma por vez)? Zoom na prateleira? Como arrastar um livro de uma estante para outra no celular?
+5. ~~Celular: como mostrar as estantes?~~ **Decidido:** uma por vez deslizando, com opção de ver tudo. **Ainda em aberto:** como arrastar um livro de uma estante para outra no celular (resolver na etapa arrastar-livro).
 6. **Temas:** qual será o **primeiro cenário** (floresta ou um dos inspirados em livros)? Lista completa e designs pendentes.
 7. **Livro repetido:** pode adicionar o mesmo livro duas vezes?
 
