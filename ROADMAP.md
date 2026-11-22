@@ -84,10 +84,10 @@
 
 **Objetivo:** fluxo completo de busca até a estante.
 
-- [ ] Botão de "adicionar livro" que abre a busca
-- [ ] Escolher o livro e colocá-lo no primeiro slot livre
-- [ ] Animação do livro entrando na estante
-- [ ] Aviso quando todas as estantes estiverem cheias
+- [x] Botão de "adicionar livro" que abre a busca
+- [x] Escolher o livro e colocá-lo no primeiro slot livre
+- [x] Animação do livro entrando na estante
+- [x] Aviso quando todas as estantes estiverem cheias
 - **Pronto quando:** pesquisar, adicionar e ver o livro entrar animado na estante.
 
 ### Etapa 6 — Modal do livro

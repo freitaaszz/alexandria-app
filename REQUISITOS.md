@@ -107,6 +107,10 @@ Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
 - **Referência de profundidade dos livros (estante "fantasy books"):** livros vistos **de frente**, com profundidade vinda principalmente de **luz e sombra**: sombra embaixo de cada prateleira, fundo da estante mais escuro, lombadas com volume e acabamento rico (títulos com tipografia trabalhada, detalhes dourados, ornamentos). A lateral do livro aparece pouco ou nada.
   - Ideias vistas na referência, a confirmar: **pilhas de livros deitados** e **objetos decorativos entre os livros** (velas, plantas, globo, frascos).
 - **Referência das estantes:** estantes **trabalhadas, com cara de jogo**. Madeira escura entalhada, arco no topo, colunas e ornamentos esculpidos, várias estantes lado a lado formando uma parede, objetos e plantas nas prateleiras, luz quente de velas e lamparinas.
+- **Estética geral: realista, com cara de jogo de verdade** (prioridade máxima do projeto: "a estética vai ser tudo").
+  - Nada de visual de desenho ou cartoon chapado: **texturas, iluminação e sombras reais**, como um objeto 3D de jogo. Referência: o cavalo 3D da página https://integra.arsenalpages.com/componentes/pagina-limiar-estudio-digital
+  - **A luz e o clima vêm do cenário:** cada tema muda a iluminação, a cor da luz e as sombras das estantes e dos livros.
+  - Impacto técnico a decidir na etapa do cenário: esse nível de realismo pode pedir **WebGL (Three.js / React Three Fiber)** para o cenário e as estantes, com texturas e luz de verdade, mantendo os livros leves para o celular.
 - O design dos temas será definido pelo usuário (pendente).
 - Modelos 3D simples podem ser usados no cenário e na decoração, mas não nos livros.
 
