@@ -60,10 +60,11 @@
 **Objetivo:** pesquisar qualquer livro.
 
 - [ ] Criar a chave da API no Google Cloud (você, com o meu passo a passo)
-- [ ] Proteger a chave (variável de ambiente)
-- [ ] Campo de busca com espera enquanto digita (debounce)
-- [ ] Lista de resultados: capa, título e autor
-- [ ] Estados: carregando, sem resultados, erro, livro sem capa ou sem páginas
+- [x] Proteger a chave (variável de ambiente)
+- [x] Campo de busca com espera enquanto digita (debounce)
+- [x] Lista de resultados: capa, título e autor
+- [x] Estados: carregando, sem resultados, erro, livro sem capa ou sem páginas
+- [x] Bônus: botão "Adicionar" simples em cada resultado (a animação e os avisos ficam para a etapa adicionar-livro)
 - **Pronto quando:** digitar "Corte de Espinhos e Rosas" e ver o livro certo na lista.
 
 ### Etapa 4 — Lombada gerada a partir da capa
