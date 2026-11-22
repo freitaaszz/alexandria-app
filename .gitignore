@@ -36,3 +36,8 @@ design/texturas/
 
 # Backups automáticos do Blender
 *.blend1
+design/modelos/
+
+# Arquivos de trabalho do Blender (grandes; ficam só no PC)
+design/blender/*.blend
+design/blender/*.png
