@@ -1,3 +1,4 @@
+import { useShelfBooks } from '@/store/library'
 import { LIBRARY, range } from './config'
 import { Slot } from './Slot'
 
@@ -13,11 +14,18 @@ type ShelfProps = {
  * da estante em tela cheia até a miniatura da visão geral.
  */
 export function Shelf({ bookcase, shelf, debug }: ShelfProps) {
+  const books = useShelfBooks(bookcase, shelf)
+
   return (
     <div>
       <div className="grid grid-cols-17 items-end gap-[0.4cqw] px-[2cqw] pt-[3cqw]">
         {range(LIBRARY.slotsPerShelf).map((slot) => (
-          <Slot key={slot} position={{ bookcase, shelf, slot }} debug={debug} />
+          <Slot
+            key={slot}
+            position={{ bookcase, shelf, slot }}
+            book={books.find((b) => b.position.slot === slot)}
+            debug={debug}
+          />
         ))}
       </div>
       {/* Tábua da prateleira */}
