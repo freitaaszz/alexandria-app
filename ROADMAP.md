@@ -14,7 +14,7 @@
   - `refactor:` reorganização sem mudar comportamento
   - `docs:` documentação
   - `chore:` configuração e dependências
-- A `main` sempre funciona e é publicada automaticamente (deploy), para testar no celular a cada etapa.
+- A `main` sempre funciona. Deploy (Vercel ou outra plataforma) fica para depois; por enquanto, localhost.
 
 ---
 
@@ -30,8 +30,8 @@
 - [x] Configurar oxlint e Prettier (código padronizado)
 - [x] Definir a estrutura de pastas
 - [x] README inicial com a descrição do projeto
-- [ ] Deploy automático (Vercel) para abrir no celular
-- **Pronto quando:** abrir o link no celular e ver a página "Biblioteca" no ar.
+- [ ] ~~Deploy automático (Vercel)~~ adiado: por enquanto só localhost (`npm run dev -- --host` para testar no celular)
+- **Pronto quando:** `npm run dev` mostra a página da Alexandria (no PC e no celular pela rede local).
 
 ### Etapa 1 — Estrutura das estantes (sem design final)
 
