@@ -124,6 +124,7 @@
 **Objetivo:** aplicar o design real com um tema.
 
 - [ ] Sistema de temas (cada tema define fundo, estantes, cenário e cores)
+- [ ] Acabamento "cara de jogo": sombras, luz, profundidade e tudo bem suave e realista (ver referências no REQUISITOS)
 - [ ] Design das estantes do tema
 - [ ] Fundo e cenário do tema
 - [ ] Ambientação animada (ex.: vagalumes, árvores balançando)
