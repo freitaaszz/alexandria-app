@@ -26,7 +26,9 @@ export function DevTools({ debug, onDebugChange }: DevToolsProps) {
 
   return (
     <div className="flex flex-wrap items-center justify-end gap-2">
-      <span className="text-xs text-parchment/50">{count} livros</span>
+      <span className="text-xs text-parchment/50">
+        {count} {count === 1 ? 'livro' : 'livros'}
+      </span>
       <button type="button" onClick={addSamples} className={buttonClass}>
         + Livros de teste
       </button>
