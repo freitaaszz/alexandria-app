@@ -59,7 +59,7 @@
 
 **Objetivo:** pesquisar qualquer livro.
 
-- [ ] Criar a chave da API no Google Cloud (você, com o meu passo a passo)
+- [x] Criar a chave da API no Google Cloud (você, com o meu passo a passo)
 - [x] Proteger a chave (variável de ambiente)
 - [x] Campo de busca com espera enquanto digita (debounce)
 - [x] Lista de resultados: capa, título e autor
@@ -150,6 +150,7 @@
 ## FASE 2 — Depois da v1 (ordem a definir)
 
 - [ ] Estante de desejos (livros não lidos)
+- [ ] Completar dados faltando com a Open Library (capa e número de páginas de livros que a Google não traz)
 - [ ] Mais cenários (Escola de Magia, Acampamento Mitológico, Corte das Fadas…)
 - [ ] Som ambiente
 - [ ] Estatísticas de leitura
