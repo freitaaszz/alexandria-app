@@ -104,6 +104,9 @@ Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
 - **Referência visual do primeiro cenário (biblioteca na floresta):** uma sala de biblioteca escura e antiga **tomada pela natureza**. Estantes altas de madeira escura cheias de livros, plantas e trepadeiras crescendo por cima e pelos lados, uma janela grande mostrando a floresta, árvores enormes e **neblina**, luz verde e suave filtrada pelas folhas, tapete antigo no chão com páginas soltas, uma poltrona e livros empilhados. Clima: silencioso, úmido e aconchegante.
   - Objetos e decoração ao redor das estantes (plantas, pilhas de livros, poltrona) podem ser modelos 3D simples ou ilustrações com profundidade.
   - Animação ambiente: folhas balançando, neblina se movendo devagar, vagalumes e partículas de luz.
+- **Referência de profundidade dos livros (estante "fantasy books"):** livros vistos **de frente**, com profundidade vinda principalmente de **luz e sombra**: sombra embaixo de cada prateleira, fundo da estante mais escuro, lombadas com volume e acabamento rico (títulos com tipografia trabalhada, detalhes dourados, ornamentos). A lateral do livro aparece pouco ou nada.
+  - Ideias vistas na referência, a confirmar: **pilhas de livros deitados** e **objetos decorativos entre os livros** (velas, plantas, globo, frascos).
+- **Referência das estantes:** estantes **trabalhadas, com cara de jogo**. Madeira escura entalhada, arco no topo, colunas e ornamentos esculpidos, várias estantes lado a lado formando uma parede, objetos e plantas nas prateleiras, luz quente de velas e lamparinas.
 - O design dos temas será definido pelo usuário (pendente).
 - Modelos 3D simples podem ser usados no cenário e na decoração, mas não nos livros.
 
