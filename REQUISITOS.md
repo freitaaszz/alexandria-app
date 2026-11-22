@@ -100,6 +100,9 @@ Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
   - (lista a crescer)
 - **Regra de propriedade intelectual:** os temas **evocam a atmosfera** desses livros, mas **não usam** nomes oficiais, logos, personagens, brasões nem arte oficial. Isso evita problemas de direitos autorais e de marca, principalmente se o projeto virar app nas lojas.
 - **Foco inicial: um único cenário**, completo e polido, para validar a experiência antes de criar os outros.
+- **Referência visual do primeiro cenário (biblioteca na floresta):** uma sala de biblioteca escura e antiga **tomada pela natureza**. Estantes altas de madeira escura cheias de livros, plantas e trepadeiras crescendo por cima e pelos lados, uma janela grande mostrando a floresta, árvores enormes e **neblina**, luz verde e suave filtrada pelas folhas, tapete antigo no chão com páginas soltas, uma poltrona e livros empilhados. Clima: silencioso, úmido e aconchegante.
+  - Objetos e decoração ao redor das estantes (plantas, pilhas de livros, poltrona) podem ser modelos 3D simples ou ilustrações com profundidade.
+  - Animação ambiente: folhas balançando, neblina se movendo devagar, vagalumes e partículas de luz.
 - O design dos temas será definido pelo usuário (pendente).
 - Modelos 3D simples podem ser usados no cenário e na decoração, mas não nos livros.
 

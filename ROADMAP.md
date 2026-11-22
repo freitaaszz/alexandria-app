@@ -49,10 +49,10 @@
 
 **Objetivo:** o "cérebro" da estante, onde cada livro guarda seus dados e sua posição.
 
-- [ ] Definir o modelo do livro (título, autor, capa, páginas, data, nota, resenha, posição)
-- [ ] Gerenciador de estado da estante (Zustand)
-- [ ] Salvamento no aparelho (localStorage), sobrevivendo a fechar a aba
-- [ ] Regras: limite de 17 por prateleira, mover, remover
+- [x] Definir o modelo do livro (título, autor, capa, páginas, data, nota, resenha, posição)
+- [x] Gerenciador de estado da estante (Zustand)
+- [x] Salvamento no aparelho (localStorage), sobrevivendo a fechar a aba
+- [x] Regras: limite de 17 por prateleira, mover, remover (com testes automatizados)
 - **Pronto quando:** livros de teste aparecem nos slots e continuam lá depois de recarregar a página.
 
 ### Etapa 3 — Busca na Google Books API

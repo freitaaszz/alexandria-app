@@ -27,15 +27,16 @@ Para testar no celular na mesma rede Wi-Fi: `npm run dev -- --host` e abra o end
 
 ## Scripts
 
-| Comando                | O que faz                            |
-| ---------------------- | ------------------------------------ |
-| `npm run dev`          | Servidor de desenvolvimento          |
-| `npm run build`        | Checa os tipos e gera a versão final |
-| `npm run preview`      | Abre a versão final localmente       |
-| `npm run lint`         | Procura problemas no código (oxlint) |
-| `npm run format`       | Formata o código (Prettier)          |
-| `npm run format:check` | Verifica se o código está formatado  |
-| `npm run typecheck`    | Checa os tipos do TypeScript         |
+| Comando                | O que faz                             |
+| ---------------------- | ------------------------------------- |
+| `npm run dev`          | Servidor de desenvolvimento           |
+| `npm run build`        | Checa os tipos e gera a versão final  |
+| `npm run preview`      | Abre a versão final localmente        |
+| `npm run lint`         | Procura problemas no código (oxlint)  |
+| `npm run format`       | Formata o código (Prettier)           |
+| `npm run format:check` | Verifica se o código está formatado   |
+| `npm run typecheck`    | Checa os tipos do TypeScript          |
+| `npm test`             | Roda os testes automatizados (Vitest) |
 
 ## Estrutura de pastas
 
