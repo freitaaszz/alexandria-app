@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useDrag } from '@/features/drag/dragStore'
-import { VIDEO_SCENE } from './scene'
+import { useUi } from '@/store/ui'
+import { VIDEO_SCENE, shelfFrame } from './scene'
 
 /** Margem extra para a compensação de zoom nunca mostrar borda. */
 const OVERSCAN = 1.04
 /** Quanto o cenário se desloca acompanhando o mouse (px), dando profundidade. */
 const PARALLAX = 10
+
+/** Espaço reservado em cima (cabeçalho) e embaixo (controles) no zoom, em px. */
+const ZOOM_MARGIN_TOP = 110
+const ZOOM_MARGIN_BOTTOM = 90
 
 const prefersReducedMotion = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -43,6 +48,25 @@ function useCoverSize() {
  */
 export function VideoStage({ children }: { children: ReactNode }) {
   const size = useCoverSize()
+  const focused = useUi((s) => s.focusedShelf)
+  const setFocusedShelf = useUi((s) => s.setFocusedShelf)
+
+  // Zoom numa prateleira: escala o palco inteiro (vídeo + livros) e centraliza
+  // a prateleira na área livre da tela.
+  let transform = 'translate(-50%, -50%) translate(var(--parallax, 0px, 0px))'
+  if (focused) {
+    const f = shelfFrame(focused.bookcase, focused.shelf)
+    const fw = ((f.right - f.left) / VIDEO_SCENE.width) * size.width
+    const fh = ((f.bottom - f.top) / VIDEO_SCENE.height) * size.height
+    const availH = window.innerHeight - ZOOM_MARGIN_TOP - ZOOM_MARGIN_BOTTOM
+    const scale = Math.min((window.innerWidth * 0.9) / fw, availH / fh)
+    const cx = ((f.left + f.right) / 2 / VIDEO_SCENE.width - 0.5) * size.width
+    const cy = ((f.top + f.bottom) / 2 / VIDEO_SCENE.height - 0.5) * size.height
+    const shiftY = (ZOOM_MARGIN_TOP - ZOOM_MARGIN_BOTTOM) / 2
+    transform = `translate(-50%, -50%) translate(${-cx * scale}px, ${
+      -cy * scale + shiftY
+    }px) scale(${scale})`
+  }
   const stageRef = useRef<HTMLDivElement>(null)
   const videoA = useRef<HTMLVideoElement>(null)
   const videoB = useRef<HTMLVideoElement>(null)
@@ -95,7 +119,7 @@ export function VideoStage({ children }: { children: ReactNode }) {
     const onMove = (e: PointerEvent) => {
       if (prefersReducedMotion() || e.pointerType !== 'mouse') return
       // Durante um arraste a sala fica parada, para o alvo não "fugir" do livro
-      if (useDrag.getState().active) return
+      if (useDrag.getState().active || useUi.getState().focusedShelf) return
       const dx = (e.clientX / window.innerWidth - 0.5) * -2 * PARALLAX
       const dy = (e.clientY / window.innerHeight - 0.5) * -2 * PARALLAX * 0.6
       stageRef.current?.style.setProperty('--parallax', `${dx}px, ${dy}px`)
@@ -120,33 +144,50 @@ export function VideoStage({ children }: { children: ReactNode }) {
     <div className="pointer-events-none fixed inset-0 overflow-hidden bg-black">
       <div
         ref={stageRef}
-        className="absolute top-1/2 left-1/2 transition-transform duration-700 ease-out"
-        style={{
-          width: size.width,
-          height: size.height,
-          transform:
-            'translate(-50%, -50%) translate(var(--parallax, 0px, 0px))',
-        }}
+        className={`absolute top-1/2 left-1/2 transition-transform ${
+          focused
+            ? 'duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]'
+            : 'duration-700 ease-out'
+        }`}
+        style={{ width: size.width, height: size.height, transform }}
       >
-        {/* Dois vídeos iguais se revezam para o loop não ter pulo */}
-        <video
-          ref={videoA}
-          src={VIDEO_SCENE.src}
-          muted
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-          className="absolute inset-0 size-full object-cover"
-        />
-        <video
-          ref={videoB}
-          src={VIDEO_SCENE.src}
-          muted
-          playsInline
-          preload="auto"
-          aria-hidden="true"
-          className="absolute inset-0 size-full object-cover"
-        />
+        {/* Com uma prateleira em foco, o resto da sala desfoca e escurece (como uma lente) */}
+        <div
+          className="absolute inset-0 transition-[filter] duration-700"
+          style={{
+            filter: focused
+              ? 'blur(0.5px) brightness(0.42) saturate(0.85)'
+              : 'none',
+          }}
+        >
+          {/* Dois vídeos iguais se revezam para o loop não ter pulo */}
+          <video
+            ref={videoA}
+            src={VIDEO_SCENE.src}
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            className="absolute inset-0 size-full object-cover"
+          />
+          <video
+            ref={videoB}
+            src={VIDEO_SCENE.src}
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            className="absolute inset-0 size-full object-cover"
+          />
+        </div>
+        {/* Clique fora da prateleira em foco: volta para a sala */}
+        {focused && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-auto absolute inset-0 cursor-zoom-out"
+            onClick={() => setFocusedShelf(null)}
+          />
+        )}
         {/* Camada da aplicação, no mesmo sistema de coordenadas do vídeo */}
         <div className="absolute inset-0">{children}</div>
       </div>

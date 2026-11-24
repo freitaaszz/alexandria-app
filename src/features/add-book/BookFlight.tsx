@@ -24,15 +24,20 @@ export function BookFlight() {
       endFlight()
       return
     }
-    let frame = requestAnimationFrame(() => {
+    let frame = 0
+    const measure = () => {
       frame = requestAnimationFrame(() => {
-        const el = document.querySelector(`[data-book-id="${flight.bookId}"]`)
-        if (!el) return endFlight()
-        const r = el.getBoundingClientRect()
-        setTarget({ x: r.x, y: r.y, width: r.width, height: r.height })
+        frame = requestAnimationFrame(() => {
+          const el = document.querySelector(`[data-book-id="${flight.bookId}"]`)
+          if (!el) return endFlight()
+          const r = el.getBoundingClientRect()
+          setTarget({ x: r.x, y: r.y, width: r.width, height: r.height })
+        })
       })
-    })
+    }
+    const timer = window.setTimeout(measure, flight.delayMs ?? 0)
     return () => {
+      window.clearTimeout(timer)
       cancelAnimationFrame(frame)
       setTarget(null)
     }

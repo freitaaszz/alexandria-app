@@ -4,6 +4,7 @@ import { BookModal } from '@/features/book-details/BookModal'
 import { DevTools } from '@/features/dev/DevTools'
 import { DragAnnouncer, DragLayer } from '@/features/drag/DragLayer'
 import { SearchDialog } from '@/features/search/SearchDialog'
+import { FocusControls } from '@/features/video-scene/FocusControls'
 import { VideoLibrary } from '@/features/video-scene/VideoLibrary'
 import { useUi } from '@/store/ui'
 
@@ -55,6 +56,7 @@ export default function App() {
           +
         </button>
 
+        <FocusControls />
         <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
         <BookFlight />
         <DragLayer />

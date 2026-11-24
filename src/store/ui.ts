@@ -8,6 +8,8 @@ export type Flight = {
   bookId: string
   from: Rect
   coverUrl?: string
+  /** Espera antes de medir o destino (ex.: a câmera voltando do zoom). */
+  delayMs?: number
 }
 
 type UiState = {
@@ -18,6 +20,8 @@ type UiState = {
   focusRequest: { bookcase: number; nonce: number } | null
   /** Pedido para deslizar para a estante vizinha (arrastando até a borda, no celular). */
   pageRequest: { direction: -1 | 1; nonce: number } | null
+  /** Prateleira em foco (a câmera aproxima e ela ocupa a tela). */
+  focusedShelf: { bookcase: number; shelf: number } | null
   /** Livro aberto no modal de detalhes. */
   selectedBookId: string | null
 
@@ -25,6 +29,7 @@ type UiState = {
   endFlight: () => void
   focusBookcase: (bookcase: number) => void
   pageBookcase: (direction: -1 | 1) => void
+  setFocusedShelf: (shelf: { bookcase: number; shelf: number } | null) => void
   openBook: (id: string) => void
   closeBook: () => void
 }
@@ -36,6 +41,7 @@ export const useUi = create<UiState>()((set, get) => ({
   focusRequest: null,
   pageRequest: null,
   selectedBookId: null,
+  focusedShelf: null,
 
   startFlight: (flight) => set({ flight, landedId: null }),
   endFlight: () =>
@@ -44,6 +50,7 @@ export const useUi = create<UiState>()((set, get) => ({
     set({ focusRequest: { bookcase, nonce: Date.now() } }),
   pageBookcase: (direction) =>
     set({ pageRequest: { direction, nonce: Date.now() } }),
+  setFocusedShelf: (focusedShelf) => set({ focusedShelf }),
   openBook: (id) => set({ selectedBookId: id }),
   closeBook: () => set({ selectedBookId: null }),
 }))

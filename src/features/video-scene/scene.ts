@@ -50,3 +50,18 @@ export const SHELVES_BOTTOM =
 /** Converte pixels do vídeo em % do quadro. */
 export const pctX = (px: number) => (px / VIDEO_SCENE.width) * 100
 export const pctY = (px: number) => (px / VIDEO_SCENE.height) * 100
+
+/**
+ * Enquadramento de uma prateleira para o zoom (em px de referência):
+ * a área dos livros com uma folga para mostrar a madeira em volta.
+ */
+export function shelfFrame(bookcase: number, shelf: number) {
+  const box = VIDEO_SCENE.bookcases[bookcase]
+  const row = VIDEO_SCENE.shelves[shelf]
+  return {
+    left: box.left - 7,
+    right: box.right + 7,
+    top: row.top - 5,
+    bottom: row.bottom + 4,
+  }
+}
