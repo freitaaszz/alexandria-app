@@ -186,8 +186,74 @@ const CASTELO_IMAGEM: VideoScene = {
   lightMap: true,
 }
 
+/** Acampamento em imagem 4K (Gemini): pavilhão grego, chalés e pinheiros. */
+const ACAMPAMENTO_CHALES: VideoScene = {
+  id: 'acampamento-chales',
+  name: 'Acampamento dos Chalés',
+  poster: '/cenarios/acampamento-chales/fundo.webp',
+  width: 2752,
+  height: 1536,
+  zoom: { centerX: 1376, centerY: 768, perSecond: 0 },
+  loopCrossfade: 0,
+  bookcases: [
+    { left: 748, right: 1140 },
+    { left: 1182, right: 1572 },
+    { left: 1613, right: 2003 },
+  ],
+  frames: [
+    { left: 725, right: 1160 },
+    { left: 1160, right: 1593 },
+    { left: 1593, right: 2025 },
+  ],
+  framesTop: 415,
+  framesBottom: 1282,
+  shelves: [
+    { top: 490, bottom: 623 },
+    { top: 633, bottom: 774 },
+    { top: 783, bottom: 922 },
+    { top: 932, bottom: 1072 },
+    { top: 1082, bottom: 1212 },
+  ],
+  light: { warm: 'rgb(255 196 110)', shadow: 'rgb(48 28 14)' },
+  lightMap: true,
+}
+
+/** Acampamento em imagem 4K (Gemini): bosque com riacho, ponte e templos. */
+const ACAMPAMENTO_BOSQUE: VideoScene = {
+  id: 'acampamento-bosque',
+  name: 'Bosque do Acampamento',
+  poster: '/cenarios/acampamento-bosque/fundo.webp',
+  width: 2752,
+  height: 1536,
+  zoom: { centerX: 1376, centerY: 768, perSecond: 0 },
+  loopCrossfade: 0,
+  bookcases: [
+    { left: 795, right: 1152 },
+    { left: 1198, right: 1552 },
+    { left: 1598, right: 1957 },
+  ],
+  frames: [
+    { left: 768, right: 1175 },
+    { left: 1175, right: 1576 },
+    { left: 1576, right: 1985 },
+  ],
+  framesTop: 470,
+  framesBottom: 1270,
+  shelves: [
+    { top: 553, bottom: 677 },
+    { top: 687, bottom: 815 },
+    { top: 825, bottom: 953 },
+    { top: 963, bottom: 1092 },
+    { top: 1102, bottom: 1210 },
+  ],
+  light: { warm: 'rgb(255 196 110)', shadow: 'rgb(48 28 14)' },
+  lightMap: true,
+}
+
 export const SCENES = [
   CASTELO_IMAGEM,
+  ACAMPAMENTO_CHALES,
+  ACAMPAMENTO_BOSQUE,
   CASTELO_NOITE,
   ACAMPAMENTO,
   CASTELO,

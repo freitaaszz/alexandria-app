@@ -132,7 +132,7 @@
 - [x] **Troca de tema:** botão "Tema" no topo com 3 cenários em vídeo (Castelo à Noite, do Kling; Acampamento ao Entardecer; Biblioteca do Castelo). A troca é na hora, os livros ficam nos mesmos lugares e a escolha fica salva. Todos com 3 estantes × 5 prateleiras × 17 slots
 - [x] **Luz do vídeo nos livros:** o quadro do vídeo (prateleiras vazias) vira um mapa de luz; cada lombada recebe a luz do ponto onde está (spots, cantos escuros, cor) e acompanha o brilho das velas ao vivo. Sombra de contato na tábua e sombra no fundo da estante, saindo do centro da luz
 - [x] **Livros mais realistas:** três tipos de lombada por livro (sobrecapa impressa com a arte da capa, tecido fosco, couro antigo), título inteiro em fonte menor, cores menos saturadas
-- [x] **Tema em imagem parada 4K** ("Castelo (imagem 4K)", Gemini) para testar a nitidez; o palco aceita cenário sem vídeo
+- [x] **Tema em imagem parada 4K** ("Castelo (imagem 4K)", Gemini) para testar a nitidez; o palco aceita cenário sem vídeo. Mais dois do acampamento em imagem 4K: "Acampamento dos Chalés" e "Bosque do Acampamento"
 - [x] Vídeo em resolução maior: o original (848×478, via WhatsApp) foi melhorado com IA no PC (Real-ESRGAN 4× → 1920×1082)
 - [x] **Troca de cenário (2026-11-24):** o castelo deu lugar ao **acampamento ao entardecer** (golden hour, chalés gregos, campistas de laranja), gerado no Gemini com as prateleiras já vazias. São **5 prateleiras por estante**, todas recebendo livros; o vídeo 1280×720 foi melhorado com IA para 1920×1080. O vídeo do castelo continua no histórico do Git
 - [ ] Celular (depois)
