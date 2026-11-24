@@ -52,6 +52,22 @@ export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
         height: `${area.bottom - area.top}%`,
       }}
     >
+      {/* Fundo de madeira escura (cobre os livros que já vêm no vídeo) */}
+      {THEME.shelfBackdrop && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -inset-x-[1.5%] -top-[6%] bottom-0"
+          style={{
+            backgroundColor: '#1d120b',
+            backgroundImage: [
+              'linear-gradient(180deg, rgb(6 3 2) 0%, rgb(6 3 2 / 0.55) 14%, transparent 45%)',
+              'linear-gradient(90deg, rgb(0 0 0 / 0.55), transparent 10%, transparent 90%, rgb(0 0 0 / 0.55))',
+              'repeating-linear-gradient(90deg, rgb(60 36 20 / 0.35) 0 0.5cqw, rgb(30 18 10 / 0.35) 0.5cqw 1.6cqw)',
+              'radial-gradient(90% 120% at 50% 100%, rgb(110 64 30 / 0.55), transparent 70%)',
+            ].join(', '),
+          }}
+        />
+      )}
       <div
         data-shelf={`${bookcase}-${shelf}`}
         className="grid h-full grid-cols-17 items-end gap-[0.12cqw]"
@@ -91,6 +107,17 @@ export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
           backgroundImage: `radial-gradient(120% 90% at 15% 30%, ${THEME.light.warm}, transparent 70%)`,
         }}
       />
+      {/* Cenário em vídeo: luz baixa e quente de vela sobre os livros, igual à do vídeo */}
+      {THEME.shelfBackdrop && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-30 mix-blend-multiply"
+          style={{
+            backgroundImage:
+              'radial-gradient(130% 110% at 50% 85%, rgb(205 160 120), rgb(120 90 70))',
+          }}
+        />
+      )}
       {/* Prateleira cheia durante um arraste */}
       <div
         aria-hidden="true"

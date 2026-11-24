@@ -1,3 +1,9 @@
+import {
+  SHELVES_BOTTOM,
+  SHELVES_TOP,
+  VIDEO_SCENE,
+} from '@/features/video-scene/scene'
+
 /**
  * Temas (cenários). Cada tema define as imagens renderizadas no Blender,
  * onde ficam as prateleiras dentro da imagem da estante e o clima da luz.
@@ -38,6 +44,11 @@ export type Theme = {
   }
   /** Velas flutuando pela sala. */
   floatingCandles: boolean
+  /**
+   * Fundo de madeira atrás dos livros. Necessário no cenário em vídeo, cujas
+   * estantes já vêm cheias de livros: o fundo cobre esses livros do vídeo.
+   */
+  shelfBackdrop?: boolean
 }
 
 export const ESCOLA_DE_MAGIA: Theme = {
@@ -69,8 +80,36 @@ export const ESCOLA_DE_MAGIA: Theme = {
   floatingCandles: true,
 }
 
+/**
+ * Sala em vídeo (gerada no PixVerse). Aqui a "estante" do site é a parte interna
+ * de cada estante do vídeo: os slots ocupam toda a largura e as prateleiras são
+ * medidas em % da altura dessa caixa (ver features/video-scene/scene.ts).
+ */
+const shelfBoxHeight = SHELVES_BOTTOM - SHELVES_TOP
+export const SALA_VIDEO: Theme = {
+  id: 'sala-video',
+  name: 'Biblioteca do Castelo',
+  images: ESCOLA_DE_MAGIA.images,
+  bookcase: {
+    width: VIDEO_SCENE.bookcases[0].right - VIDEO_SCENE.bookcases[0].left,
+    height: shelfBoxHeight,
+    slotsLeft: 0,
+    slotsWidth: 100,
+    shelves: VIDEO_SCENE.shelves.map((row) => ({
+      top: ((row.top - SHELVES_TOP) / shelfBoxHeight) * 100,
+      bottom: ((row.bottom - SHELVES_TOP) / shelfBoxHeight) * 100,
+    })),
+  },
+  light: {
+    warm: 'rgb(255 175 95)',
+    shadow: 'rgb(10 6 4)',
+  },
+  floatingCandles: false,
+  shelfBackdrop: true,
+}
+
 /** Tema em uso. (A troca de temas pela pessoa vem depois.) */
-export const THEME = ESCOLA_DE_MAGIA
+export const THEME = SALA_VIDEO
 
 /** Largura de um slot em "cqw" (% da largura da estante). */
 export const SLOT_WIDTH_CQW = THEME.bookcase.slotsWidth / 17

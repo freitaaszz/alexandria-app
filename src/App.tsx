@@ -4,9 +4,7 @@ import { BookModal } from '@/features/book-details/BookModal'
 import { DevTools } from '@/features/dev/DevTools'
 import { DragAnnouncer, DragLayer } from '@/features/drag/DragLayer'
 import { SearchDialog } from '@/features/search/SearchDialog'
-import { Library } from '@/features/shelf/Library'
-import { CandlesBehind, CandlesFront } from '@/features/theme/FloatingCandles'
-import { SceneBackground } from '@/features/theme/SceneBackground'
+import { VideoLibrary } from '@/features/video-scene/VideoLibrary'
 import { useUi } from '@/store/ui'
 
 export default function App() {
@@ -18,14 +16,17 @@ export default function App() {
 
   return (
     <>
-      <SceneBackground />
-      <CandlesBehind />
       <div
         inert={modalOpen}
         className="relative z-10 flex min-h-dvh flex-col gap-4 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] lg:px-8"
       >
-        {/* Velas da frente: acima das estantes, abaixo do cabeçalho e dos botões */}
-        <CandlesFront />
+        {/* A sala em vídeo, cobrindo a tela, com as estantes do site encaixadas */}
+        <VideoLibrary debug={debug} />
+        {/* Sombra no topo para o título e os botões aparecerem bem sobre o vídeo */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-x-0 top-0 z-20 h-28 bg-gradient-to-b from-black/70 to-transparent"
+        />
         <header className="relative z-30 flex flex-wrap items-center justify-between gap-2">
           <h1 className="bg-[linear-gradient(180deg,#f6e3ae,#c9993f_55%,#8f6526)] bg-clip-text font-display text-2xl font-semibold tracking-[0.12em] text-transparent drop-shadow-[0_2px_6px_rgb(0_0_0/0.8)] lg:text-3xl">
             Alexandria
@@ -43,10 +44,6 @@ export default function App() {
             </button>
           </div>
         </header>
-
-        <main className="flex flex-1 flex-col">
-          <Library debug={debug} />
-        </main>
 
         {/* Botão flutuante no celular, perto do polegar */}
         <button
