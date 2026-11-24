@@ -49,3 +49,10 @@ export function spineHeight({ id, dimensions }: Shape) {
   }
   return Math.round(lerp(86, 97, hashString(`${id}h`)))
 }
+
+/**
+ * Título como vai na lombada: sem subtítulo (depois de ":", " - ", "(" ...),
+ * como as editoras fazem, para a letra caber maior.
+ */
+export const spineTitle = (title: string) =>
+  title.split(/\s*[:([—–]\s*|\s+-\s+/)[0].trim() || title

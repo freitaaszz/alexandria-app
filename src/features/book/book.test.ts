@@ -4,6 +4,7 @@ import {
   MIN_WIDTH,
   hashString,
   spineHeight,
+  spineTitle,
   spineWidth,
 } from './geometry'
 import { extractPalette, fallbackPalette, textColorFor } from './palette'
@@ -85,5 +86,16 @@ describe('proxiedCoverUrl', () => {
 
   it('não mexe em outros endereços', () => {
     expect(proxiedCoverUrl('https://exemplo.com/a.jpg')).toBeNull()
+  })
+})
+
+describe('spineTitle', () => {
+  it('tira o subtítulo, como nas lombadas de verdade', () => {
+    expect(spineTitle('Sapiens: Uma breve história da humanidade')).toBe(
+      'Sapiens',
+    )
+    expect(spineTitle('Duna (Crônicas de Duna, #1)')).toBe('Duna')
+    expect(spineTitle('O Hobbit - edição de bolso')).toBe('O Hobbit')
+    expect(spineTitle('Cem Anos de Solidão')).toBe('Cem Anos de Solidão')
   })
 })

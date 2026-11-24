@@ -6,7 +6,7 @@ import {
   type ShelfLight,
 } from '@/features/video-scene/lightMap'
 import type { Book } from '@/types/book'
-import { hashString, spineHeight, spineWidth } from './geometry'
+import { hashString, spineHeight, spineTitle, spineWidth } from './geometry'
 import { useSpinePalette } from './useSpinePalette'
 
 /** Profundidade do livro (da lombada até o fundo da estante). */
@@ -117,8 +117,9 @@ const JACKET_SHEEN =
   'linear-gradient(90deg, rgb(0 0 0/0.4) 0%, rgb(0 0 0/0.05) 7%, rgb(255 255 255/0.14) 18%, rgb(255 255 255/0.03) 30%, transparent 60%, rgb(0 0 0/0.12) 88%, rgb(0 0 0/0.45) 100%)'
 
 /**
- * Tamanho do título para caber inteiro na lombada (em cqw):
- * limitado pela largura e pelo espaço na altura.
+ * Tamanho do título para caber inteiro na lombada (em cqw).
+ * Título longo em lombada grossa quebra em duas linhas (como nos livros de
+ * verdade), para a letra não ficar minúscula.
  */
 function fitTitle(
   text: string,
@@ -127,9 +128,27 @@ function fitTitle(
   maxFromWidth: number,
   charWidth: number,
 ) {
-  const byHeight = heightCqw / Math.max(4, text.length * charWidth)
-  return Math.max(0.55, Math.min(widthCqw * maxFromWidth, byHeight, 1.9))
+  // Com folga: letras largas (M, W) ocupam mais que a média
+  const length = Math.max(4, text.length * charWidth * 1.15)
+  const oneLine = Math.min(widthCqw * maxFromWidth, heightCqw / length, 2.3)
+  const twoLines = Math.min(
+    widthCqw * 0.36,
+    (2 * heightCqw * 0.9) / length,
+    2.3,
+  )
+  const wrap = text.includes(' ') && twoLines > oneLine * 1.2
+  return { size: Math.max(1, wrap ? twoLines : oneLine), wrap }
 }
+
+/** Classes do título: uma linha com reticências, ou quebrando em duas. */
+const titleFlow = (wrap: boolean) =>
+  wrap
+    ? 'max-h-full overflow-hidden text-center [text-wrap:balance]'
+    : 'max-h-full truncate'
+
+/** No máximo duas linhas (na escrita vertical, a "largura" conta as linhas). */
+const titleLines = (size: number, wrap: boolean) =>
+  wrap ? { maxWidth: `${size * 2.3}cqw` } : {}
 
 const lastName = (book: Book) => book.authors[0]?.split(' ').slice(-1)[0] ?? ''
 
@@ -152,9 +171,16 @@ function SpineFace({
   const darkSpine = palette.text !== '#1a120c'
   const ink = darkSpine ? '#efe6d6' : '#1d140d'
   const author = lastName(book)
+  const title = spineTitle(book.title)
 
   if (kind === 'jacket') {
-    const size = fitTitle(book.title, widthCqw, heightCqw * 0.62, 0.52, 0.5)
+    const { size, wrap } = fitTitle(
+      title,
+      widthCqw,
+      heightCqw * 0.62,
+      0.64,
+      0.46,
+    )
     return (
       <>
         {/* Arte da capa como textura (sem dar para ler o texto dela) */}
@@ -181,10 +207,17 @@ function SpineFace({
         {/* Título */}
         <div className="absolute inset-x-0 top-[26%] bottom-[12%] flex items-center justify-center">
           <span
-            className="max-h-full truncate font-spine leading-none font-medium [writing-mode:vertical-rl]"
-            style={{ fontSize: `${size}cqw`, color: ink }}
+            className={`${titleFlow(wrap)} font-spine leading-[1.05] font-medium [writing-mode:vertical-rl]`}
+            style={{
+              ...titleLines(size, wrap),
+              fontSize: `${size}cqw`,
+              color: ink,
+              textShadow: darkSpine
+                ? '0 0.06cqw 0.1cqw rgb(0 0 0/0.7)'
+                : 'none',
+            }}
           >
-            {book.title}
+            {title}
           </span>
         </div>
         {/* Marca da editora embaixo */}
@@ -201,8 +234,8 @@ function SpineFace({
   }
 
   if (kind === 'cloth') {
-    const size = fitTitle(book.title, widthCqw, heightCqw * 0.55, 0.46, 0.55)
-    const stamp = darkSpine ? GOLD_TEXT : '#2a1a0e'
+    const { size, wrap } = fitTitle(title, widthCqw, heightCqw * 0.55, 0.6, 0.5)
+    const stamp = darkSpine ? '#ecc983' : '#24170d'
     return (
       <>
         <div className="absolute inset-0" style={{ backgroundImage: CLOTH }} />
@@ -224,14 +257,17 @@ function SpineFace({
         ))}
         <div className="absolute inset-x-0 top-[13%] bottom-[22%] flex items-center justify-center">
           <span
-            className="max-h-full truncate font-serif leading-none font-semibold [writing-mode:vertical-rl]"
+            className={`${titleFlow(wrap)} font-serif leading-[1.05] font-bold [writing-mode:vertical-rl]`}
             style={{
+              ...titleLines(size, wrap),
               fontSize: `${size}cqw`,
               color: stamp,
-              textShadow: darkSpine ? '0 0.05cqw 0 rgb(0 0 0/0.6)' : 'none',
+              textShadow: darkSpine
+                ? '0 0.06cqw 0.08cqw rgb(0 0 0/0.75)'
+                : 'none',
             }}
           >
-            {book.title}
+            {title}
           </span>
         </div>
         {author && (
@@ -260,7 +296,7 @@ function SpineFace({
   }
 
   // Couro antigo
-  const size = fitTitle(book.title, widthCqw, heightCqw * 0.5, 0.48, 0.66)
+  const { size, wrap } = fitTitle(title, widthCqw, heightCqw * 0.5, 0.58, 0.6)
   const titleColor = darkSpine ? GOLD_TEXT : '#2a1a0e'
   const titleShadow = darkSpine
     ? '0 0.08cqw 0 rgb(0 0 0/0.8), 0 -0.05cqw 0 rgb(255 230 170/0.25)'
@@ -275,14 +311,15 @@ function SpineFace({
       <Band at="86%" />
       <div className="absolute inset-x-0 top-[18%] bottom-[22%] flex items-center justify-center">
         <span
-          className="max-h-full truncate font-display leading-none font-semibold tracking-[0.06em] uppercase [writing-mode:vertical-rl]"
+          className={`${titleFlow(wrap)} font-display leading-[1.1] font-semibold tracking-[0.04em] uppercase [writing-mode:vertical-rl]`}
           style={{
+            ...titleLines(size, wrap),
             fontSize: `${size}cqw`,
             color: titleColor,
             textShadow: titleShadow,
           }}
         >
-          {book.title}
+          {title}
         </span>
       </div>
       {/* Couro gasto nas pontas */}
