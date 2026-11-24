@@ -4,9 +4,8 @@ import { useShallow } from 'zustand/react/shallow'
 import { createId } from '@/lib/id'
 import {
   findFirstFreeSlot,
-  isInBounds,
+  fitToLibrary,
   moveBook,
-  normalize,
   removeBook,
   type MoveResult,
 } from '@/lib/placement'
@@ -95,15 +94,11 @@ export const useLibrary = create<LibraryState>()(
       version: 1,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ books: state.books }),
-      // Ignora dados corrompidos ou de posições que não existem mais.
+      // Ignora dados corrompidos e reencaixa livros fora da capacidade atual.
       merge: (persisted, current) => {
         const saved = (persisted as Partial<LibraryState> | undefined)?.books
         const books = Array.isArray(saved)
-          ? normalize(
-              saved.filter(
-                (b) => b?.id && b.position && isInBounds(b.position),
-              ),
-            )
+          ? fitToLibrary(saved.filter((b) => b?.id && b.position))
           : []
         return { ...current, books }
       },

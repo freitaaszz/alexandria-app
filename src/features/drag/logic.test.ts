@@ -41,15 +41,18 @@ describe('arrange', () => {
 })
 
 describe('slotIndexFromX', () => {
-  it('divide a prateleira em 17 partes', () => {
-    expect(slotIndexFromX(0, 0, 170)).toBe(0)
-    expect(slotIndexFromX(15, 0, 170)).toBe(1)
-    expect(slotIndexFromX(169, 0, 170)).toBe(16)
+  const N = LIBRARY.slotsPerShelf
+  const W = N * 10 // prateleira com 10px por slot
+
+  it('divide a prateleira em partes iguais, uma por slot', () => {
+    expect(slotIndexFromX(0, 0, W)).toBe(0)
+    expect(slotIndexFromX(15, 0, W)).toBe(1)
+    expect(slotIndexFromX(W - 1, 0, W)).toBe(N - 1)
   })
 
   it('fica dentro dos limites', () => {
-    expect(slotIndexFromX(-50, 0, 170)).toBe(0)
-    expect(slotIndexFromX(999, 0, 170)).toBe(16)
+    expect(slotIndexFromX(-50, 0, W)).toBe(0)
+    expect(slotIndexFromX(9999, 0, W)).toBe(N - 1)
   })
 })
 

@@ -4,7 +4,7 @@ import type { SlotPosition } from '@/types/library'
 export const LIBRARY = {
   bookcases: 3,
   shelvesPerBookcase: 4,
-  slotsPerShelf: 17,
+  slotsPerShelf: 12,
 } as const
 
 /**

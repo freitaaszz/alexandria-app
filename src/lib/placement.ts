@@ -139,3 +139,34 @@ export function removeBook<T extends Positioned>(books: T[], id: string): T[] {
   )
   return rest.map((b) => packed.get(b.id) ?? b)
 }
+
+/**
+ * Encaixa livros salvos na capacidade atual da biblioteca (ex.: depois de
+ * diminuir os slots por prateleira de 17 para 12). Nenhum livro some:
+ * quem "sobra" numa prateleira vai para o próximo espaço livre. Só se a
+ * biblioteca inteira estiver cheia é que os excedentes ficam de fora.
+ */
+export function fitToLibrary<T extends Positioned>(books: T[]): T[] {
+  const validShelf = ({ bookcase, shelf }: SlotPosition) =>
+    Number.isInteger(bookcase) &&
+    Number.isInteger(shelf) &&
+    bookcase >= 0 &&
+    bookcase < LIBRARY.bookcases &&
+    shelf >= 0 &&
+    shelf < LIBRARY.shelvesPerBookcase
+
+  const packed = normalize(books.filter((b) => validShelf(b.position)))
+  const kept = packed.filter((b) => b.position.slot < LIBRARY.slotsPerShelf)
+  const overflow = [
+    ...packed.filter((b) => b.position.slot >= LIBRARY.slotsPerShelf),
+    ...books.filter((b) => !validShelf(b.position)),
+  ]
+
+  const result = [...kept]
+  for (const book of overflow) {
+    const free = findFirstFreeSlot(result)
+    if (!free) break
+    result.push({ ...book, position: free })
+  }
+  return result
+}

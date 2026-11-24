@@ -70,7 +70,10 @@ export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
       )}
       <div
         data-shelf={`${bookcase}-${shelf}`}
-        className="grid h-full grid-cols-17 items-end gap-[0.12cqw]"
+        className="grid h-full items-end gap-[0.12cqw]"
+        style={{
+          gridTemplateColumns: `repeat(${LIBRARY.slotsPerShelf}, minmax(0, 1fr))`,
+        }}
       >
         {range(LIBRARY.slotsPerShelf).map((slot) => (
           <Slot

@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { LIBRARY } from '@/features/shelf/config'
-import { findFirstFreeSlot, moveBook, normalize, removeBook } from './placement'
+import {
+  findFirstFreeSlot,
+  fitToLibrary,
+  moveBook,
+  normalize,
+  removeBook,
+} from './placement'
 
 const at = (id: string, slot: number, shelf = 0, bookcase = 0) => ({
   id,
@@ -74,7 +80,11 @@ describe('moveBook', () => {
   })
 
   it('soltar depois do último livro deixa ele no fim, sem buraco', () => {
-    const r = moveBook([at('a', 0), at('b', 1), at('x', 0, 1)], 'x', pos(15))
+    const r = moveBook(
+      [at('a', 0), at('b', 1), at('x', 0, 1)],
+      'x',
+      pos(LIBRARY.slotsPerShelf - 2),
+    )
     expect(r.ok && order(r.books)).toBe('a b x')
     expect(r.ok && r.books.find((b) => b.id === 'x')!.position.slot).toBe(2)
   })
@@ -102,12 +112,20 @@ describe('moveBook', () => {
   })
 
   it('permite reorganizar dentro de uma prateleira cheia', () => {
-    const r = moveBook(shelfOf(LIBRARY.slotsPerShelf), 'b16', pos(0))
-    expect(r.ok && order(r.books).startsWith('b16 b0 b1')).toBe(true)
+    const r = moveBook(
+      shelfOf(LIBRARY.slotsPerShelf),
+      `b${LIBRARY.slotsPerShelf - 1}`,
+      pos(0),
+    )
+    expect(
+      r.ok && order(r.books).startsWith(`b${LIBRARY.slotsPerShelf - 1} b0 b1`),
+    ).toBe(true)
   })
 
   it('recusa posição fora da biblioteca e livro inexistente', () => {
-    expect(moveBook([at('a', 0)], 'a', pos(17)).ok).toBe(false)
+    expect(moveBook([at('a', 0)], 'a', pos(LIBRARY.slotsPerShelf)).ok).toBe(
+      false,
+    )
     expect(moveBook([at('a', 0)], 'zzz', pos(1)).ok).toBe(false)
   })
 
@@ -139,5 +157,28 @@ describe('normalize', () => {
     const r = normalize([at('a', 3), at('b', 9), at('c', 0)])
     expect(order(r)).toBe('c a b')
     expectPacked(r)
+  })
+})
+
+describe('fitToLibrary', () => {
+  it('realoca quem passou da capacidade, sem perder livros', () => {
+    const N = LIBRARY.slotsPerShelf
+    // uma prateleira com 3 livros a mais do que cabe agora
+    const books = Array.from({ length: N + 3 }, (_, i) => at(`b${i}`, i))
+    const r = fitToLibrary(books)
+    expect(r).toHaveLength(N + 3)
+    expectPacked(r)
+    expect(order(r, 0)).toBe(
+      books
+        .slice(0, N)
+        .map((b) => b.id)
+        .join(' '),
+    )
+    expect(order(r, 1)).toBe(`b${N} b${N + 1} b${N + 2}`)
+  })
+
+  it('também recoloca livros de prateleiras que não existem mais', () => {
+    const r = fitToLibrary([at('a', 0), at('x', 0, 9, 0)])
+    expect(r.find((b) => b.id === 'x')!.position).toEqual(pos(1))
   })
 })

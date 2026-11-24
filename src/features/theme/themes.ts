@@ -1,3 +1,4 @@
+import { LIBRARY } from '@/features/shelf/config'
 import {
   SHELVES_BOTTOM,
   SHELVES_TOP,
@@ -31,7 +32,7 @@ export type Theme = {
     /** Tamanho da imagem renderizada (px). */
     width: number
     height: number
-    /** Faixa horizontal onde ficam os 17 slots, em % da largura. */
+    /** Faixa horizontal onde ficam os slots, em % da largura. */
     slotsLeft: number
     slotsWidth: number
     /** As 4 prateleiras, de cima para baixo. */
@@ -112,4 +113,4 @@ export const SALA_VIDEO: Theme = {
 export const THEME = SALA_VIDEO
 
 /** Largura de um slot em "cqw" (% da largura da estante). */
-export const SLOT_WIDTH_CQW = THEME.bookcase.slotsWidth / 17
+export const SLOT_WIDTH_CQW = THEME.bookcase.slotsWidth / LIBRARY.slotsPerShelf
