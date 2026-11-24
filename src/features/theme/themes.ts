@@ -35,7 +35,7 @@ export type Theme = {
     /** Faixa horizontal onde ficam os slots, em % da largura. */
     slotsLeft: number
     slotsWidth: number
-    /** As 4 prateleiras, de cima para baixo. */
+    /** As prateleiras, de cima para baixo. */
     shelves: ShelfArea[]
   }
   /** Clima: cor da luz principal e da sombra sobre os livros. */
@@ -82,14 +82,14 @@ export const ESCOLA_DE_MAGIA: Theme = {
 }
 
 /**
- * Sala em vídeo (gerada no PixVerse). Aqui a "estante" do site é a parte interna
+ * Acampamento em vídeo (gerado por IA). Aqui a "estante" do site é a parte interna
  * de cada estante do vídeo: os slots ocupam toda a largura e as prateleiras são
  * medidas em % da altura dessa caixa (ver features/video-scene/scene.ts).
  */
 const shelfBoxHeight = SHELVES_BOTTOM - SHELVES_TOP
 export const SALA_VIDEO: Theme = {
-  id: 'sala-video',
-  name: 'Biblioteca do Castelo',
+  id: 'acampamento',
+  name: 'Acampamento ao Entardecer',
   images: ESCOLA_DE_MAGIA.images,
   bookcase: {
     width: VIDEO_SCENE.bookcases[0].right - VIDEO_SCENE.bookcases[0].left,
@@ -101,12 +101,12 @@ export const SALA_VIDEO: Theme = {
       bottom: ((row.bottom - SHELVES_TOP) / shelfBoxHeight) * 100,
     })),
   },
+  // Golden hour: luz dourada e sombras suaves (as prateleiras do vídeo já vêm vazias)
   light: {
-    warm: 'rgb(255 175 95)',
-    shadow: 'rgb(10 6 4)',
+    warm: 'rgb(255 196 110)',
+    shadow: 'rgb(48 28 14)',
   },
   floatingCandles: false,
-  shelfBackdrop: true,
 }
 
 /** Tema em uso. (A troca de temas pela pessoa vem depois.) */

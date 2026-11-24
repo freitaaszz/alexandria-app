@@ -129,6 +129,7 @@
 - [x] Parallax leve com o mouse (congela durante o arraste)
 - [x] **Zoom na prateleira:** clicar numa prateleira aproxima a câmera (ela ocupa a tela, livros grandes e legíveis, sala desfocada); setas ‹ › e ← → trocam de prateleira; Esc / "Voltar à sala" / clique fora voltam. Modal e arrastar funcionam dentro do zoom
 - [x] Vídeo em resolução maior: o original (848×478, via WhatsApp) foi melhorado com IA no PC (Real-ESRGAN 4× → 1920×1082)
+- [x] **Troca de cenário (2026-11-24):** o castelo deu lugar ao **acampamento ao entardecer** (golden hour, chalés gregos, campistas de laranja), gerado no Gemini com as prateleiras já vazias. São **5 prateleiras por estante**, todas recebendo livros; o vídeo 1280×720 foi melhorado com IA para 1920×1080. O vídeo do castelo continua no histórico do Git
 - [ ] Celular (depois)
 
 O caminho 3D em tempo real (sub-etapas 8.1–8.6 abaixo) fica pausado; o trabalho está nas branches `prova-3d` e `sala-3d`.

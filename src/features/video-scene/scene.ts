@@ -1,51 +1,53 @@
 /**
- * Cenário em vídeo: a sala gerada por IA (PixVerse) roda em loop no fundo e
- * a aplicação fica por cima, com os livros encaixados nas prateleiras do vídeo.
+ * Cenário em vídeo: o acampamento ao entardecer (gerado por IA) roda em loop
+ * no fundo e a aplicação fica por cima, com os livros encaixados nas
+ * prateleiras vazias do vídeo.
  *
  * Todas as medidas estão em "pixels de referência" do quadro original
- * (848 × 478), medidas no 1º quadro, e viram % do quadro na tela. Por isso o
- * arquivo pode ter qualquer resolução com a mesma proporção: o atual é a
- * versão melhorada por IA (Real-ESRGAN 4× → 1920 × 1082).
+ * (1280 × 720), medidas no 1º quadro, e viram % do quadro na tela. Por isso o
+ * arquivo pode ter qualquer resolução com a mesma proporção (16:9): o atual
+ * é a versão melhorada por IA (Real-ESRGAN 4× → 1920 × 1080).
  */
 
 export type Box = { left: number; right: number }
 export type Row = { top: number; bottom: number }
 
 export const VIDEO_SCENE = {
-  src: '/cenarios/sala-video/sala.mp4',
-  width: 848,
-  height: 478,
+  src: '/cenarios/acampamento/acampamento.mp4',
+  width: 1280,
+  height: 720,
 
   /**
-   * A câmera do vídeo se aproxima devagar (~2,8% em 10 s), em direção ao
-   * centro das estantes. O site compensa diminuindo o vídeo na mesma
-   * proporção enquanto ele toca, então na tela a sala fica parada.
+   * A câmera do vídeo se aproxima devagar (~3,5% em 10 s). O site compensa
+   * diminuindo o vídeo na mesma proporção enquanto ele toca, então na tela o
+   * cenário fica parado. O centro foi achado comparando o 1º e o último quadro.
    */
-  zoom: { centerX: 424, centerY: 268, perSecond: 0.0028 },
+  zoom: { centerX: 708, centerY: 353, perSecond: 0.0036 },
 
   /** Segundos de transição suave entre o fim e o começo do loop. */
   loopCrossfade: 1.2,
 
   /** Parte interna de cada estante (entre as laterais de madeira). */
   bookcases: [
-    { left: 286, right: 364 },
-    { left: 384, right: 464 },
-    { left: 484, right: 561 },
+    { left: 293, right: 494 },
+    { left: 530, right: 733 },
+    { left: 767, right: 978 },
   ] satisfies Box[],
 
-  /** As 4 prateleiras de cima: topo do vão e superfície da tábua. */
+  /** As 5 prateleiras: topo do vão e superfície da tábua. */
   shelves: [
-    { top: 181, bottom: 218.5 },
-    { top: 222, bottom: 260 },
-    { top: 263.5, bottom: 301 },
-    { top: 305, bottom: 344 },
+    { top: 258, bottom: 317 },
+    { top: 323, bottom: 392 },
+    { top: 399, bottom: 462 },
+    { top: 470, bottom: 528 },
+    { top: 540, bottom: 600 },
   ] satisfies Row[],
 } as const
 
-/** Faixa vertical que contém as 4 prateleiras (a "caixa" de cada estante no site). */
-export const SHELVES_TOP = VIDEO_SCENE.shelves[0].top - 3
+/** Faixa vertical que contém as prateleiras (a "caixa" de cada estante no site). */
+export const SHELVES_TOP = VIDEO_SCENE.shelves[0].top - 4
 export const SHELVES_BOTTOM =
-  VIDEO_SCENE.shelves[VIDEO_SCENE.shelves.length - 1].bottom + 2
+  VIDEO_SCENE.shelves[VIDEO_SCENE.shelves.length - 1].bottom + 3
 
 /** Converte pixels do vídeo em % do quadro. */
 export const pctX = (px: number) => (px / VIDEO_SCENE.width) * 100
@@ -59,9 +61,9 @@ export function shelfFrame(bookcase: number, shelf: number) {
   const box = VIDEO_SCENE.bookcases[bookcase]
   const row = VIDEO_SCENE.shelves[shelf]
   return {
-    left: box.left - 7,
-    right: box.right + 7,
-    top: row.top - 5,
-    bottom: row.bottom + 4,
+    left: box.left - 10,
+    right: box.right + 10,
+    top: row.top - 7,
+    bottom: row.bottom + 6,
   }
 }

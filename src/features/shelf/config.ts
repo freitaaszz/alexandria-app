@@ -3,7 +3,7 @@ import type { SlotPosition } from '@/types/library'
 /** Tamanho da biblioteca. Mudar aqui muda o layout inteiro. */
 export const LIBRARY = {
   bookcases: 3,
-  shelvesPerBookcase: 4,
+  shelvesPerBookcase: 5,
   slotsPerShelf: 12,
 } as const
 

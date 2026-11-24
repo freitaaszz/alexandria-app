@@ -68,9 +68,14 @@ describe('keyboardStep', () => {
 
   it('↓ desce de prateleira e passa para a próxima estante', () => {
     expect(keyboardStep(books, 'a', pos(2, 0), 'ArrowDown')).toEqual(pos(1, 1))
-    expect(keyboardStep(books, 'a', pos(0, 3, 0), 'ArrowDown')).toEqual(
-      pos(0, 0, 1),
-    )
+    expect(
+      keyboardStep(
+        books,
+        'a',
+        pos(0, LIBRARY.shelvesPerBookcase - 1, 0),
+        'ArrowDown',
+      ),
+    ).toEqual(pos(0, 0, 1))
   })
 
   it('↑ no topo da primeira estante não sai do lugar', () => {
