@@ -2,9 +2,10 @@
  * Cenário em vídeo: a sala gerada por IA (PixVerse) roda em loop no fundo e
  * a aplicação fica por cima, com os livros encaixados nas prateleiras do vídeo.
  *
- * Todas as medidas estão em PIXELS DO VÍDEO (848 × 478), medidas no 1º quadro.
- * Ao trocar o arquivo por uma versão em resolução maior, basta mudar `width`
- * e `height`: as posições são convertidas em % do quadro.
+ * Todas as medidas estão em "pixels de referência" do quadro original
+ * (848 × 478), medidas no 1º quadro, e viram % do quadro na tela. Por isso o
+ * arquivo pode ter qualquer resolução com a mesma proporção: o atual é a
+ * versão melhorada por IA (Real-ESRGAN 4× → 1920 × 1082).
  */
 
 export type Box = { left: number; right: number }

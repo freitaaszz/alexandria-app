@@ -127,7 +127,7 @@
 - [x] As 4 prateleiras de cima recebem os livros; a de baixo mantém os livros do vídeo como decoração
 - [x] Busca, voo do livro, modal e arrastar funcionando por cima do vídeo (testado no desktop)
 - [x] Parallax leve com o mouse (congela durante o arraste)
-- [ ] Trocar pelo vídeo em resolução maior (o atual veio do WhatsApp, 848×478)
+- [x] Vídeo em resolução maior: o original (848×478, via WhatsApp) foi melhorado com IA no PC (Real-ESRGAN 4× → 1920×1082)
 - [ ] Celular (depois)
 
 O caminho 3D em tempo real (sub-etapas 8.1–8.6 abaixo) fica pausado; o trabalho está nas branches `prova-3d` e `sala-3d`.
