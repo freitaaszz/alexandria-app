@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useDrag } from '@/features/drag/dragStore'
 import { useUi } from '@/store/ui'
-import { VIDEO_SCENE, shelfFrame } from './scene'
+import { VIDEO_SCENE, pctX, pctY, shelfFrame } from './scene'
 
 /** Margem extra para a compensação de zoom nunca mostrar borda. */
 const OVERSCAN = 1.04
@@ -67,6 +67,12 @@ export function VideoStage({ children }: { children: ReactNode }) {
       -cy * scale + shiftY
     }px) scale(${scale})`
   }
+  // A última prateleira em foco continua guardada para o holofote sumir suave
+  const [lastFocused, setLastFocused] = useState(focused)
+  if (focused && focused !== lastFocused) setLastFocused(focused)
+  const spotShelf = focused ?? lastFocused
+  const spot = spotShelf && shelfFrame(spotShelf.bookcase, spotShelf.shelf)
+
   const stageRef = useRef<HTMLDivElement>(null)
   const videoA = useRef<HTMLVideoElement>(null)
   const videoB = useRef<HTMLVideoElement>(null)
@@ -151,15 +157,7 @@ export function VideoStage({ children }: { children: ReactNode }) {
         }`}
         style={{ width: size.width, height: size.height, transform }}
       >
-        {/* Com uma prateleira em foco, o resto da sala desfoca e escurece (como uma lente) */}
-        <div
-          className="absolute inset-0 transition-[filter] duration-700"
-          style={{
-            filter: focused
-              ? 'blur(0.5px) brightness(0.42) saturate(0.85)'
-              : 'none',
-          }}
-        >
+        <div className="absolute inset-0">
           {/* Dois vídeos iguais se revezam para o loop não ter pulo */}
           <video
             ref={videoA}
@@ -180,6 +178,26 @@ export function VideoStage({ children }: { children: ReactNode }) {
             className="absolute inset-0 size-full object-cover"
           />
         </div>
+        {/*
+          Holofote: com uma prateleira em foco, o resto escurece e a prateleira
+          continua iluminada (uma sombra enorme em volta do recorte dela).
+        */}
+        {spot && (
+          <div
+            aria-hidden="true"
+            className={`pointer-events-none absolute rounded-[3px] transition-opacity duration-700 ${
+              focused ? 'opacity-100' : 'opacity-0'
+            }`}
+            style={{
+              left: `${pctX(spot.left)}%`,
+              top: `${pctY(spot.top)}%`,
+              width: `${pctX(spot.right - spot.left)}%`,
+              height: `${pctY(spot.bottom - spot.top)}%`,
+              boxShadow:
+                '0 0 0 400vmax rgb(8 5 3 / 0.6), 0 0 8px 5px rgb(8 5 3 / 0.6)',
+            }}
+          />
+        )}
         {/* Clique fora da prateleira em foco: volta para a sala */}
         {focused && (
           <div
