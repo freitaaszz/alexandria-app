@@ -154,6 +154,42 @@ const CASTELO_NOITE: VideoScene = {
   lightMap: true,
 }
 
+/**
+ * Sala da torre com o trem passando na janela (Kling, câmera parada).
+ * O 1º e o último quadro diferem (o trem), então o loop é um crossfade.
+ */
+const CASTELO_TREM: VideoScene = {
+  id: 'castelo-trem',
+  name: 'Torre do Trem',
+  src: '/cenarios/castelo-trem/castelo-trem.mp4',
+  poster: '/cenarios/castelo-trem/poster.webp',
+  width: 1280,
+  height: 720,
+  zoom: { centerX: 640, centerY: 360, perSecond: 0 },
+  loopCrossfade: 1,
+  bookcases: [
+    { left: 322, right: 515 },
+    { left: 542, right: 737 },
+    { left: 764, right: 959 },
+  ],
+  frames: [
+    { left: 304, right: 529 },
+    { left: 529, right: 751 },
+    { left: 751, right: 975 },
+  ],
+  framesTop: 277,
+  framesBottom: 604,
+  shelves: [
+    { top: 302, bottom: 354 },
+    { top: 359, bottom: 412 },
+    { top: 417, bottom: 469 },
+    { top: 474, bottom: 526 },
+    { top: 531, bottom: 585 },
+  ],
+  light: { warm: 'rgb(255 180 110)', shadow: 'rgb(8 5 4)' },
+  lightMap: true,
+}
+
 /** Castelo à noite em imagem parada 4K (Gemini), para testar a nitidez. */
 const CASTELO_IMAGEM: VideoScene = {
   id: 'castelo-imagem',
@@ -251,6 +287,7 @@ const ACAMPAMENTO_BOSQUE: VideoScene = {
 }
 
 export const SCENES = [
+  CASTELO_TREM,
   CASTELO_IMAGEM,
   ACAMPAMENTO_CHALES,
   ACAMPAMENTO_BOSQUE,
