@@ -39,7 +39,7 @@
 **Objetivo:** as 3 estantes com prateleiras e slots, em versão "rascunho".
 
 - [x] Layout das 3 estantes no desktop
-- [x] Prateleiras com 17 slots cada
+- [x] Prateleiras com slots fixos (17; hoje 12)
 - [x] Layout no celular: uma estante por vez, deslizando
 - [x] Botão "ver biblioteca inteira" no celular (tocar numa estante leva até ela)
 - [x] Slots vazios visíveis (modo debug)
@@ -53,7 +53,7 @@
 - [x] Definir o modelo do livro (título, autor, capa, páginas, data, nota, resenha, posição)
 - [x] Gerenciador de estado da estante (Zustand)
 - [x] Salvamento no aparelho (localStorage), sobrevivendo a fechar a aba
-- [x] Regras: limite de 17 por prateleira, mover, remover (com testes automatizados)
+- [x] Regras: limite por prateleira, mover, remover (com testes automatizados)
 - **Pronto quando:** livros de teste aparecem nos slots e continuam lá depois de recarregar a página.
 
 ### Etapa 3 — Busca na Google Books API

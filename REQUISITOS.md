@@ -30,7 +30,7 @@ Site de **uma única página**: uma biblioteca pessoal com **3 estantes** vazias
 
 - **3 estantes** fixas na página.
 - Começam **vazias**.
-- **4 prateleiras por estante**, com **17 slots por prateleira**. Cada livro ocupa 1 slot (68 livros por estante, 204 no total).
+- **4 prateleiras por estante**, com **12 slots por prateleira** (eram 17; diminuído em 2026-11-23 para os livros ficarem mais grossos e legíveis no cenário em vídeo). Cada livro ocupa 1 slot (48 livros por estante, 144 no total). Livros salvos além da nova capacidade são realocados automaticamente para o próximo espaço livre.
 - **Os livros ficam sempre juntos, a partir da esquerda** (sem buracos). Colocar um livro no meio faz o resto andar para a direita; tirar um faz os outros fecharem o espaço.
 - **Celular:** uma estante por vez, deslizando para o lado, com um botão para **ver a biblioteca inteira** (as 3 estantes juntas, como no desktop). Tocar numa estante na visão geral leva até ela.
 - O formato visual das estantes e do cenário depende do tema escolhido (RF07).
@@ -66,7 +66,7 @@ Site de **uma única página**: uma biblioteca pessoal com **3 estantes** vazias
   - dentro da mesma prateleira (ex.: colocar em primeiro, ou entre dois livros);
   - entre prateleiras;
   - entre estantes.
-- Respeita o limite de 17 slots. Prateleira cheia não aceita o livro, com um feedback visual claro.
+- Respeita o limite de slots da prateleira. Prateleira cheia não aceita o livro, com um feedback visual claro.
 - Soltar fora de um slot devolve o livro à posição original, com animação.
 - No celular, o toque longo evita conflito com a rolagem da tela. No Android há vibração leve ao pegar o livro, quando suportada.
 
@@ -133,7 +133,7 @@ Ao clicar ou tocar no livro (sem arrastar), abre um modal com:
 ## 5. Questões em aberto
 
 1. **Onde salvar os dados?** Só no aparelho (sem login) ou com conta na nuvem (login)?
-2. **Espessura com slots fixos:** com 17 slots iguais, um livro grosso ocupa o mesmo espaço que um fino? Opções:
+2. **Espessura com slots fixos:** com slots iguais, um livro grosso ocupa o mesmo espaço que um fino? Opções:
    - (a) todos os slots têm a mesma largura e a espessura varia só visualmente dentro dela;
    - (b) livros muito grossos ocupam 2 slots.
 3. ~~Quantas prateleiras por estante?~~ **Decidido:** 4 prateleiras.
