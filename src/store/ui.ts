@@ -20,7 +20,12 @@ type UiState = {
   focusRequest: { bookcase: number; nonce: number } | null
   /** Pedido para deslizar para a estante vizinha (arrastando até a borda, no celular). */
   pageRequest: { direction: -1 | 1; nonce: number } | null
-  /** Prateleira em foco (a câmera aproxima e ela ocupa a tela). */
+  /**
+   * Zoom em níveis: sala → estante → prateleira.
+   * focusedBookcase: estante em foco (ela inteira ocupa a altura da tela).
+   * focusedShelf: prateleira em foco dentro dela (ocupa a tela).
+   */
+  focusedBookcase: number | null
   focusedShelf: { bookcase: number; shelf: number } | null
   /** Livro aberto no modal de detalhes. */
   selectedBookId: string | null
@@ -29,7 +34,14 @@ type UiState = {
   endFlight: () => void
   focusBookcase: (bookcase: number) => void
   pageBookcase: (direction: -1 | 1) => void
+  /** Foca uma estante (ou volta para a sala com null). */
+  setFocusedBookcase: (bookcase: number | null) => void
+  /** Foca uma prateleira; null volta para a estante dela. */
   setFocusedShelf: (shelf: { bookcase: number; shelf: number } | null) => void
+  /** Sobe um nível de zoom (prateleira → estante → sala). */
+  zoomOut: () => void
+  /** Volta direto para a sala. */
+  clearFocus: () => void
   openBook: (id: string) => void
   closeBook: () => void
 }
@@ -41,6 +53,7 @@ export const useUi = create<UiState>()((set, get) => ({
   focusRequest: null,
   pageRequest: null,
   selectedBookId: null,
+  focusedBookcase: null,
   focusedShelf: null,
 
   startFlight: (flight) => set({ flight, landedId: null }),
@@ -50,7 +63,21 @@ export const useUi = create<UiState>()((set, get) => ({
     set({ focusRequest: { bookcase, nonce: Date.now() } }),
   pageBookcase: (direction) =>
     set({ pageRequest: { direction, nonce: Date.now() } }),
-  setFocusedShelf: (focusedShelf) => set({ focusedShelf }),
+  setFocusedBookcase: (focusedBookcase) =>
+    set({ focusedBookcase, focusedShelf: null }),
+  setFocusedShelf: (focusedShelf) =>
+    set(
+      focusedShelf
+        ? { focusedShelf, focusedBookcase: focusedShelf.bookcase }
+        : { focusedShelf: null },
+    ),
+  zoomOut: () =>
+    set(
+      get().focusedShelf
+        ? { focusedShelf: null }
+        : { focusedBookcase: null, focusedShelf: null },
+    ),
+  clearFocus: () => set({ focusedBookcase: null, focusedShelf: null }),
   openBook: (id) => set({ selectedBookId: id }),
   closeBook: () => set({ selectedBookId: null }),
 }))

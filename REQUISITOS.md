@@ -70,11 +70,18 @@ Site de **uma única página**: uma biblioteca pessoal com **3 estantes** vazias
 - Soltar fora de um slot devolve o livro à posição original, com animação.
 - No celular, o toque longo evita conflito com a rolagem da tela. No Android há vibração leve ao pegar o livro, quando suportada.
 
-### RF04b — Zoom na prateleira
+### RF04b — Zoom em níveis: sala → estante → prateleira
 
-- Clicar numa prateleira faz a câmera **aproximar** dela: a prateleira ocupa a tela e os livros ficam grandes e legíveis; o resto da sala desfoca e escurece.
-- Dentro do zoom tudo funciona: abrir o livro (modal) e arrastar para reorganizar.
-- Trocar de prateleira com as setas na tela ou ← → no teclado; voltar à sala com Esc, botão "Voltar à sala" ou clique fora.
+- Na sala, clicar numa estante faz a câmera **aproximar** dela: a estante inteira ocupa a altura da tela e o resto escurece em volta (holofote).
+- Dentro da estante, clicar numa prateleira aproxima a prateleira: ela ocupa a tela e os livros ficam grandes e legíveis.
+- Em qualquer nível tudo funciona: abrir o livro (modal) e arrastar para reorganizar.
+- Setas na tela ou ← → no teclado trocam de estante (ou de prateleira, no zoom da prateleira). Esc, o botão "Voltar" ou um clique fora sobem um nível.
+
+### RF04c — Mudar a estante de lugar
+
+- Segurar e arrastar uma estante (pela madeira ou por um espaço vazio) leva a estante **com todos os livros** para outra posição, na mesma mecânica do livro: ela sai do lugar e segue o mouse, as outras andam para abrir espaço e, ao soltar, ela assenta no lugar novo.
+- Começando com o zoom na estante, a câmera volta para a sala ao pegar, para mostrar onde soltar. Esc cancela.
+- Alternativa sem arrastar (e pelo teclado): no zoom da estante, botões "Mover para a esquerda / direita".
 
 ### RF05 — Modal de informações do livro
 

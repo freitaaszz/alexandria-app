@@ -6,6 +6,7 @@ import {
   findFirstFreeSlot,
   fitToLibrary,
   moveBook,
+  moveBookcase,
   removeBook,
   type MoveResult,
 } from '@/lib/placement'
@@ -26,6 +27,8 @@ type LibraryState = {
   setSpinePalette: (id: string, spine: SpinePalette) => void
   /** Move para uma posição; o resto da prateleira anda (ver lib/placement). */
   moveBook: (id: string, to: SlotPosition) => MoveResult<Book>
+  /** Muda uma estante inteira de lugar (com os livros). */
+  moveBookcase: (from: number, to: number) => void
   /** Esvazia a biblioteca (usado nas ferramentas de desenvolvimento). */
   clear: () => void
 }
@@ -86,6 +89,9 @@ export const useLibrary = create<LibraryState>()(
         if (result.ok) set({ books: result.books })
         return result
       },
+
+      moveBookcase: (from, to) =>
+        set((state) => ({ books: moveBookcase(state.books, from, to) })),
 
       clear: () => set({ books: [] }),
     }),

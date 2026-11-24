@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useDrag } from '@/features/drag/dragStore'
 import { useUi } from '@/store/ui'
-import { VIDEO_SCENE, pctX, pctY, shelfFrame } from './scene'
+import { VIDEO_SCENE, focusFrame, pctX, pctY } from './scene'
 
 /** Margem extra para a compensação de zoom nunca mostrar borda. */
 const OVERSCAN = 1.04
@@ -48,14 +48,17 @@ function useCoverSize() {
  */
 export function VideoStage({ children }: { children: ReactNode }) {
   const size = useCoverSize()
-  const focused = useUi((s) => s.focusedShelf)
-  const setFocusedShelf = useUi((s) => s.setFocusedShelf)
+  const focusedShelf = useUi((s) => s.focusedShelf)
+  const focusedBookcase = useUi((s) => s.focusedBookcase)
+  const zoomOut = useUi((s) => s.zoomOut)
+  const frame = focusFrame(focusedBookcase, focusedShelf)
+  const focused = frame !== null
 
-  // Zoom numa prateleira: escala o palco inteiro (vídeo + livros) e centraliza
-  // a prateleira na área livre da tela.
+  // Zoom numa estante ou prateleira: escala o palco inteiro (vídeo + livros)
+  // e centraliza o recorte na área livre da tela.
   let transform = 'translate(-50%, -50%) translate(var(--parallax, 0px, 0px))'
-  if (focused) {
-    const f = shelfFrame(focused.bookcase, focused.shelf)
+  if (frame) {
+    const f = frame
     const fw = ((f.right - f.left) / VIDEO_SCENE.width) * size.width
     const fh = ((f.bottom - f.top) / VIDEO_SCENE.height) * size.height
     const availH = window.innerHeight - ZOOM_MARGIN_TOP - ZOOM_MARGIN_BOTTOM
@@ -63,15 +66,22 @@ export function VideoStage({ children }: { children: ReactNode }) {
     const cx = ((f.left + f.right) / 2 / VIDEO_SCENE.width - 0.5) * size.width
     const cy = ((f.top + f.bottom) / 2 / VIDEO_SCENE.height - 0.5) * size.height
     const shiftY = (ZOOM_MARGIN_TOP - ZOOM_MARGIN_BOTTOM) / 2
-    transform = `translate(-50%, -50%) translate(${-cx * scale}px, ${
-      -cy * scale + shiftY
-    }px) scale(${scale})`
+    // A câmera não passa da borda do vídeo (sem faixas pretas): perto da
+    // beirada, o recorte fica um pouco fora do centro. O vídeo encolhe até
+    // ~4% enquanto toca (compensação do zoom), por isso a folga.
+    const clamp = (value: number, stage: number, screen: number) => {
+      const room = Math.max(0, (stage * scale * 0.96 - screen) / 2)
+      return Math.min(room, Math.max(-room, value))
+    }
+    const tx = clamp(-cx * scale, size.width, window.innerWidth)
+    const ty = clamp(-cy * scale + shiftY, size.height, window.innerHeight)
+    transform = `translate(-50%, -50%) translate(${tx}px, ${ty}px) scale(${scale})`
   }
-  // A última prateleira em foco continua guardada para o holofote sumir suave
-  const [lastFocused, setLastFocused] = useState(focused)
-  if (focused && focused !== lastFocused) setLastFocused(focused)
-  const spotShelf = focused ?? lastFocused
-  const spot = spotShelf && shelfFrame(spotShelf.bookcase, spotShelf.shelf)
+  // O último recorte em foco continua guardado para o holofote sumir suave
+  const [lastFrame, setLastFrame] = useState(frame)
+  if (frame && JSON.stringify(frame) !== JSON.stringify(lastFrame))
+    setLastFrame(frame)
+  const spot = frame ?? lastFrame
 
   const stageRef = useRef<HTMLDivElement>(null)
   const videoA = useRef<HTMLVideoElement>(null)
@@ -125,7 +135,13 @@ export function VideoStage({ children }: { children: ReactNode }) {
     const onMove = (e: PointerEvent) => {
       if (prefersReducedMotion() || e.pointerType !== 'mouse') return
       // Durante um arraste a sala fica parada, para o alvo não "fugir" do livro
-      if (useDrag.getState().active || useUi.getState().focusedShelf) return
+      const ui = useUi.getState()
+      if (
+        useDrag.getState().active ||
+        ui.focusedShelf ||
+        ui.focusedBookcase !== null
+      )
+        return
       const dx = (e.clientX / window.innerWidth - 0.5) * -2 * PARALLAX
       const dy = (e.clientY / window.innerHeight - 0.5) * -2 * PARALLAX * 0.6
       stageRef.current?.style.setProperty('--parallax', `${dx}px, ${dy}px`)
@@ -162,6 +178,7 @@ export function VideoStage({ children }: { children: ReactNode }) {
           <video
             ref={videoA}
             src={VIDEO_SCENE.src}
+            poster={VIDEO_SCENE.poster}
             muted
             playsInline
             preload="auto"
@@ -171,6 +188,7 @@ export function VideoStage({ children }: { children: ReactNode }) {
           <video
             ref={videoB}
             src={VIDEO_SCENE.src}
+            poster={VIDEO_SCENE.poster}
             muted
             playsInline
             preload="auto"
@@ -185,7 +203,7 @@ export function VideoStage({ children }: { children: ReactNode }) {
         {spot && (
           <div
             aria-hidden="true"
-            className={`pointer-events-none absolute rounded-[3px] transition-opacity duration-700 ${
+            className={`pointer-events-none absolute rounded-[3px] transition-[opacity,left,top,width,height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               focused ? 'opacity-100' : 'opacity-0'
             }`}
             style={{
@@ -198,12 +216,12 @@ export function VideoStage({ children }: { children: ReactNode }) {
             }}
           />
         )}
-        {/* Clique fora da prateleira em foco: volta para a sala */}
+        {/* Clique fora do recorte em foco: sobe um nível de zoom */}
         {focused && (
           <div
             aria-hidden="true"
             className="pointer-events-auto absolute inset-0 cursor-zoom-out"
-            onClick={() => setFocusedShelf(null)}
+            onClick={zoomOut}
           />
         )}
         {/* Camada da aplicação, no mesmo sistema de coordenadas do vídeo */}

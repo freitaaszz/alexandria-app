@@ -14,6 +14,8 @@ export type Row = { top: number; bottom: number }
 
 export const VIDEO_SCENE = {
   src: '/cenarios/acampamento/acampamento.mp4',
+  /** 1º quadro do vídeo (aparece antes de ele carregar e na estante arrastada). */
+  poster: '/cenarios/acampamento/poster.webp',
   width: 1280,
   height: 720,
 
@@ -33,6 +35,15 @@ export const VIDEO_SCENE = {
     { left: 530, right: 733 },
     { left: 767, right: 978 },
   ] satisfies Box[],
+
+  /** Contorno de cada estante inteira (do topo da cornija até a base). */
+  frames: [
+    { left: 278, right: 511 },
+    { left: 511, right: 749 },
+    { left: 749, right: 995 },
+  ] satisfies Box[],
+  framesTop: 208,
+  framesBottom: 642,
 
   /** As 5 prateleiras: topo do vão e superfície da tábua. */
   shelves: [
@@ -66,4 +77,25 @@ export function shelfFrame(bookcase: number, shelf: number) {
     top: row.top - 7,
     bottom: row.bottom + 6,
   }
+}
+
+/** Enquadramento de uma estante inteira para o zoom (em px de referência). */
+export function bookcaseFrame(bookcase: number) {
+  const box = VIDEO_SCENE.frames[bookcase]
+  return {
+    left: box.left - 2,
+    right: box.right + 2,
+    top: VIDEO_SCENE.framesTop - 2,
+    bottom: VIDEO_SCENE.framesBottom + 2,
+  }
+}
+
+/** O que a câmera enquadra agora: uma prateleira, uma estante ou nada (a sala). */
+export function focusFrame(
+  bookcase: number | null,
+  shelf: { bookcase: number; shelf: number } | null,
+) {
+  if (shelf) return shelfFrame(shelf.bookcase, shelf.shelf)
+  if (bookcase !== null) return bookcaseFrame(bookcase)
+  return null
 }

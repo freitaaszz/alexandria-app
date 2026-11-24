@@ -128,6 +128,7 @@
 - [x] Busca, voo do livro, modal e arrastar funcionando por cima do vídeo (testado no desktop)
 - [x] Parallax leve com o mouse (congela durante o arraste)
 - [x] **Zoom na prateleira:** clicar numa prateleira aproxima a câmera (ela ocupa a tela, livros grandes e legíveis, sala desfocada); setas ‹ › e ← → trocam de prateleira; Esc / "Voltar à sala" / clique fora voltam. Modal e arrastar funcionam dentro do zoom
+- [x] **Zoom na estante e mudar estante de lugar:** zoom em níveis (sala → estante → prateleira) com holofote; arrastar a estante leva os livros juntos, as outras abrem espaço; botões "Mover para a esquerda / direita" no zoom da estante
 - [x] Vídeo em resolução maior: o original (848×478, via WhatsApp) foi melhorado com IA no PC (Real-ESRGAN 4× → 1920×1082)
 - [x] **Troca de cenário (2026-11-24):** o castelo deu lugar ao **acampamento ao entardecer** (golden hour, chalés gregos, campistas de laranja), gerado no Gemini com as prateleiras já vazias. São **5 prateleiras por estante**, todas recebendo livros; o vídeo 1280×720 foi melhorado com IA para 1920×1080. O vídeo do castelo continua no histórico do Git
 - [ ] Celular (depois)

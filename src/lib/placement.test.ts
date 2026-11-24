@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { LIBRARY } from '@/features/shelf/config'
 import {
+  bookcaseOrder,
   findFirstFreeSlot,
   fitToLibrary,
   moveBook,
+  moveBookcase,
   normalize,
   removeBook,
 } from './placement'
@@ -180,5 +182,22 @@ describe('fitToLibrary', () => {
   it('também recoloca livros de prateleiras que não existem mais', () => {
     const r = fitToLibrary([at('a', 0), at('x', 0, 9, 0)])
     expect(r.find((b) => b.id === 'x')!.position).toEqual(pos(1))
+  })
+})
+
+describe('moveBookcase', () => {
+  it('a estante vai para o lugar e as outras andam', () => {
+    expect(bookcaseOrder(0, 2)).toEqual([1, 2, 0])
+    expect(bookcaseOrder(2, 0)).toEqual([2, 0, 1])
+    expect(bookcaseOrder(1, 1)).toEqual([0, 1, 2])
+  })
+
+  it('os livros vão junto com a estante, no mesmo lugar dentro dela', () => {
+    const books = [at('a', 3, 1, 0), at('b', 0, 0, 1), at('c', 5, 4, 2)]
+    expect(moveBookcase(books, 0, 2).map((b) => b.position)).toEqual([
+      pos(3, 1, 2),
+      pos(0, 0, 0),
+      pos(5, 4, 1),
+    ])
   })
 })

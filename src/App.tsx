@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { BookFlight } from '@/features/add-book/BookFlight'
 import { BookModal } from '@/features/book-details/BookModal'
 import { DevTools } from '@/features/dev/DevTools'
+import { BookcaseDragLayer } from '@/features/drag/BookcaseDragLayer'
 import { DragAnnouncer, DragLayer } from '@/features/drag/DragLayer'
 import { SearchDialog } from '@/features/search/SearchDialog'
 import { FocusControls } from '@/features/video-scene/FocusControls'
@@ -59,6 +60,7 @@ export default function App() {
         <FocusControls />
         <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
         <BookFlight />
+        <BookcaseDragLayer />
         <DragLayer />
         <DragAnnouncer />
       </div>

@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { sourceBookcase, useBookcaseDrag } from '@/features/drag/bookcaseDrag'
 import { justDragged, useDrag } from '@/features/drag/dragStore'
 import { arrange, isBlocked } from '@/features/drag/logic'
 import { THEME, type ShelfArea } from '@/features/theme/themes'
@@ -28,12 +29,16 @@ export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
   const activeId = useDrag((s) => s.active?.bookId)
   const target = useDrag((s) => s.target)
 
+  // Arrastando uma estante: aqui aparecem os livros da estante que vai ficar
+  // neste lugar (ou nada, onde a estante "na mão" vai cair)
+  const source = useBookcaseDrag((s) => sourceBookcase(s, bookcase))
+
   const shelfBooks = useMemo(
     () =>
       arrange(books, activeId, target).filter(
-        (b) => b.position.bookcase === bookcase && b.position.shelf === shelf,
+        (b) => b.position.bookcase === source && b.position.shelf === shelf,
       ),
-    [books, activeId, target, bookcase, shelf],
+    [books, activeId, target, source, shelf],
   )
 
   const isTargetShelf = target?.bookcase === bookcase && target?.shelf === shelf
@@ -44,16 +49,24 @@ export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
     isBlocked(books, activeId, target)
 
   const focused = useUi((s) => s.focusedShelf)
+  const focusedBookcase = useUi((s) => s.focusedBookcase)
   const setFocusedShelf = useUi((s) => s.setFocusedShelf)
+  const setFocusedBookcase = useUi((s) => s.setFocusedBookcase)
   const isFocused = focused?.bookcase === bookcase && focused?.shelf === shelf
-  // Com outra prateleira em foco, esta fica apagada no fundo
-  const dimmed = !!focused && !isFocused
+  // Já dentro desta estante: clicar aproxima a prateleira
+  const inBookcase = focusedBookcase === bookcase
+  // Fora do recorte em foco, a prateleira fica apagada no fundo
+  const dimmed = focused ? !isFocused : focusedBookcase !== null && !inBookcase
 
-  /** Clicar num espaço da prateleira (fora de um livro) aproxima a câmera nela. */
+  /**
+   * Clicar num espaço da prateleira (fora de um livro) aproxima a câmera:
+   * da sala para a estante; da estante para a prateleira.
+   */
   const handleClick = (e: React.MouseEvent) => {
     if (isFocused || justDragged()) return
     if ((e.target as HTMLElement).closest('[data-open-book]')) return
-    setFocusedShelf({ bookcase, shelf })
+    if (inBookcase) setFocusedShelf({ bookcase, shelf })
+    else setFocusedBookcase(bookcase)
   }
 
   return (
@@ -69,14 +82,14 @@ export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
         height: `${area.bottom - area.top}%`,
       }}
     >
-      {/* Teclado/leitor de tela: botão para aproximar a prateleira */}
-      {!isFocused && (
+      {/* Teclado/leitor de tela: dentro da estante, botão para aproximar a prateleira */}
+      {inBookcase && !isFocused && (
         <button
           type="button"
           onClick={() => setFocusedShelf({ bookcase, shelf })}
           className="sr-only focus:not-sr-only focus:absolute focus:inset-0 focus:z-40 focus:rounded focus:ring-2 focus:ring-ember"
         >
-          Aproximar prateleira {shelf + 1} da estante {bookcase + 1}
+          Aproximar prateleira {shelf + 1}
         </button>
       )}
       {/* Fundo de madeira escura (cobre os livros que já vêm no vídeo) */}
@@ -149,7 +162,7 @@ export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
         />
       )}
       {/* Brilho suave ao passar o mouse: "dá para aproximar" */}
-      {!focused && (
+      {inBookcase && !focused && (
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -inset-[1.5%] z-30 rounded-[0.6cqw] opacity-0 shadow-[inset_0_0_0_0.35cqw_rgb(227_180_98/0.55),0_0_3cqw_rgb(227_180_98/0.25)] transition-opacity duration-200 group-hover/shelf:opacity-100"

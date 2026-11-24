@@ -59,17 +59,18 @@ export function SearchDialog({ open, onClose }: SearchDialogProps) {
     if (!result.ok) return
     dialogRef.current?.close()
     focusBookcase(result.book.position.bookcase)
-    // Com outra prateleira em foco, a câmera volta para a sala antes do voo
-    const { focusedShelf, setFocusedShelf } = useUi.getState()
+    // Se o livro cai fora do que está em foco, a câmera volta para a sala antes do voo
+    const { focusedShelf, focusedBookcase, clearFocus } = useUi.getState()
     const { bookcase, shelf } = result.book.position
-    const landsInFocus =
-      focusedShelf?.bookcase === bookcase && focusedShelf?.shelf === shelf
-    if (focusedShelf && !landsInFocus) setFocusedShelf(null)
+    const landsInView = focusedShelf
+      ? focusedShelf.bookcase === bookcase && focusedShelf.shelf === shelf
+      : focusedBookcase === null || focusedBookcase === bookcase
+    if (!landsInView) clearFocus()
     startFlight({
       bookId: result.book.id,
       from: coverRect,
       coverUrl: book.coverUrl,
-      delayMs: focusedShelf && !landsInFocus ? 950 : 0,
+      delayMs: landsInView ? 0 : 950,
     })
   }
 

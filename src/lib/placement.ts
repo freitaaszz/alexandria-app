@@ -170,3 +170,32 @@ export function fitToLibrary<T extends Positioned>(books: T[]): T[] {
   }
   return result
 }
+
+/**
+ * Ordem das estantes depois de tirar a estante `from` e colocá-la em `to`
+ * (as outras andam para abrir espaço, como os livros numa prateleira).
+ * order[i] = qual estante (de antes) fica na posição i.
+ */
+export function bookcaseOrder(from: number, to: number): number[] {
+  const order = Array.from({ length: LIBRARY.bookcases }, (_, i) => i)
+  if (from === to || !order.includes(from) || !order.includes(to)) return order
+  order.splice(from, 1)
+  order.splice(to, 0, from)
+  return order
+}
+
+/** Muda uma estante inteira de lugar, levando os livros dela junto. */
+export function moveBookcase<T extends Positioned>(
+  books: T[],
+  from: number,
+  to: number,
+): T[] {
+  const order = bookcaseOrder(from, to)
+  return books.map((book) => ({
+    ...book,
+    position: {
+      ...book.position,
+      bookcase: order.indexOf(book.position.bookcase),
+    },
+  }))
+}
