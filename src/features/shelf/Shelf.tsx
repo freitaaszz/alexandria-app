@@ -14,6 +14,24 @@ type ShelfProps = {
   debug: boolean
   /** Onde esta prateleira fica na imagem da estante. */
   area: ShelfArea
+  /** Visual do cenário: faixa dos slots, luz e fundo de madeira. */
+  look?: ShelfLook
+}
+
+export type ShelfLook = {
+  /** Faixa horizontal dos slots, em % da largura da estante. */
+  slotsLeft: number
+  slotsWidth: number
+  light: { warm: string; shadow: string }
+  backdrop?: boolean
+}
+
+/** Padrão: o tema em imagem (caminho antigo). */
+const DEFAULT_LOOK: ShelfLook = {
+  slotsLeft: THEME.bookcase.slotsLeft,
+  slotsWidth: THEME.bookcase.slotsWidth,
+  light: THEME.light,
+  backdrop: THEME.shelfBackdrop,
 }
 
 /**
@@ -24,7 +42,13 @@ type ShelfProps = {
  * Durante um arraste, mostra a prévia: o livro já no lugar onde cairia e os
  * vizinhos afastados (ver features/drag/logic.ts).
  */
-export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
+export function Shelf({
+  bookcase,
+  shelf,
+  debug,
+  area,
+  look = DEFAULT_LOOK,
+}: ShelfProps) {
   const books = useLibrary((s) => s.books)
   const activeId = useDrag((s) => s.active?.bookId)
   const target = useDrag((s) => s.target)
@@ -76,8 +100,8 @@ export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
         isFocused ? 'z-10' : 'cursor-zoom-in'
       } ${dimmed ? 'opacity-35' : ''}`}
       style={{
-        left: `${THEME.bookcase.slotsLeft}%`,
-        width: `${THEME.bookcase.slotsWidth}%`,
+        left: `${look.slotsLeft}%`,
+        width: `${look.slotsWidth}%`,
         top: `${area.top}%`,
         height: `${area.bottom - area.top}%`,
       }}
@@ -93,7 +117,7 @@ export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
         </button>
       )}
       {/* Fundo de madeira escura (cobre os livros que já vêm no vídeo) */}
-      {THEME.shelfBackdrop && (
+      {look.backdrop && (
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -inset-x-[1.5%] -top-[6%] bottom-0"
@@ -136,7 +160,7 @@ export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
         className="pointer-events-none absolute inset-x-0 -top-[8%] bottom-0 z-30 mix-blend-multiply"
         style={{
           backgroundImage: [
-            `linear-gradient(180deg, ${THEME.light.shadow} 0%, rgb(12 6 3 / 0.55) 9%, transparent 34%)`,
+            `linear-gradient(180deg, ${look.light.shadow} 0%, rgb(12 6 3 / 0.55) 9%, transparent 34%)`,
             'linear-gradient(90deg, rgb(12 6 3 / 0.5), transparent 12%, transparent 80%, rgb(12 6 3 / 0.55))',
             'linear-gradient(0deg, rgb(12 6 3 / 0.6), transparent 4%)',
           ].join(', '),
@@ -147,11 +171,11 @@ export function Shelf({ bookcase, shelf, debug, area }: ShelfProps) {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-30 opacity-40 mix-blend-soft-light"
         style={{
-          backgroundImage: `radial-gradient(120% 90% at 15% 30%, ${THEME.light.warm}, transparent 70%)`,
+          backgroundImage: `radial-gradient(120% 90% at 15% 30%, ${look.light.warm}, transparent 70%)`,
         }}
       />
       {/* Cenário em vídeo: luz baixa e quente de vela sobre os livros, igual à do vídeo */}
-      {THEME.shelfBackdrop && (
+      {look.backdrop && (
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-30 mix-blend-multiply"

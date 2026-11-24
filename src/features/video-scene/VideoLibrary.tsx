@@ -3,11 +3,17 @@ import {
   useBookcaseDrag,
 } from '@/features/drag/bookcaseDrag'
 import { justDragged } from '@/features/drag/dragStore'
-import { Shelf } from '@/features/shelf/Shelf'
+import { Shelf, type ShelfLook } from '@/features/shelf/Shelf'
 import { LIBRARY, range } from '@/features/shelf/config'
-import { THEME } from '@/features/theme/themes'
 import { useUi } from '@/store/ui'
-import { SHELVES_BOTTOM, SHELVES_TOP, VIDEO_SCENE, pctX, pctY } from './scene'
+import {
+  pctX,
+  pctY,
+  shelfAreas,
+  shelvesBottom,
+  shelvesTop,
+  useScene,
+} from './scene'
 import { VideoStage } from './VideoStage'
 
 /**
@@ -24,16 +30,26 @@ export function VideoLibrary({ debug }: { debug: boolean }) {
   const setFocusedBookcase = useUi((s) => s.setFocusedBookcase)
   const caseDragging = useBookcaseDrag((s) => s.from !== null)
   const inRoom = focusedBookcase === null && !focusedShelf
+  const scene = useScene()
+  const areas = shelfAreas(scene)
+  const top = shelvesTop(scene)
+  const bottom = shelvesBottom(scene)
+  const look: ShelfLook = {
+    slotsLeft: 0,
+    slotsWidth: 100,
+    light: scene.light,
+    backdrop: scene.shelfBackdrop,
+  }
 
   return (
-    <VideoStage>
-      {VIDEO_SCENE.bookcases.map((box, index) => {
-        const frame = VIDEO_SCENE.frames[index]
+    <VideoStage key={scene.id} scene={scene}>
+      {scene.bookcases.map((box, index) => {
+        const frame = scene.frames[index]
         const frameStyle = {
-          left: `${pctX(frame.left)}%`,
-          width: `${pctX(frame.right - frame.left)}%`,
-          top: `${pctY(VIDEO_SCENE.framesTop)}%`,
-          height: `${pctY(VIDEO_SCENE.framesBottom - VIDEO_SCENE.framesTop)}%`,
+          left: `${pctX(scene, frame.left)}%`,
+          width: `${pctX(scene, frame.right - frame.left)}%`,
+          top: `${pctY(scene, scene.framesTop)}%`,
+          height: `${pctY(scene, scene.framesBottom - scene.framesTop)}%`,
         }
         return (
           <div key={index} className="group/bookcase">
@@ -70,10 +86,10 @@ export function VideoLibrary({ debug }: { debug: boolean }) {
               onPointerDown={(e) => startBookcasePointer(e, index)}
               className="@container pointer-events-auto absolute"
               style={{
-                left: `${pctX(box.left)}%`,
-                width: `${pctX(box.right - box.left)}%`,
-                top: `${pctY(SHELVES_TOP)}%`,
-                height: `${pctY(SHELVES_BOTTOM - SHELVES_TOP)}%`,
+                left: `${pctX(scene, box.left)}%`,
+                width: `${pctX(scene, box.right - box.left)}%`,
+                top: `${pctY(scene, top)}%`,
+                height: `${pctY(scene, bottom - top)}%`,
               }}
             >
               {/* Teclado/leitor de tela: aproximar a estante */}
@@ -92,7 +108,8 @@ export function VideoLibrary({ debug }: { debug: boolean }) {
                   bookcase={index}
                   shelf={shelf}
                   debug={debug}
-                  area={THEME.bookcase.shelves[shelf]}
+                  area={areas[shelf]}
+                  look={look}
                 />
               ))}
             </section>

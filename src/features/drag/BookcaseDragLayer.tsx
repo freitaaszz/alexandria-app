@@ -7,9 +7,9 @@ import {
 } from 'motion/react'
 import { useEffect, useRef } from 'react'
 import {
-  SHELVES_BOTTOM,
-  SHELVES_TOP,
-  VIDEO_SCENE,
+  shelvesBottom,
+  shelvesTop,
+  useScene,
 } from '@/features/video-scene/scene'
 import { caseX, caseY, useBookcaseDrag } from './bookcaseDrag'
 
@@ -28,6 +28,7 @@ export function BookcaseDragLayer() {
   const clone = useBookcaseDrag((s) => s.clone)
   const reduceMotion = useReducedMotion()
   const booksRef = useRef<HTMLDivElement>(null)
+  const scene = useScene()
 
   const lean = useSpring(
     useTransform(useVelocity(caseX), [-2400, 0, 2400], [-4, 0, 4], {
@@ -46,10 +47,12 @@ export function BookcaseDragLayer() {
   if (from === null) return null
 
   // Recorte da estante no quadro do vídeo (px de referência → px da tela)
-  const frame = VIDEO_SCENE.frames[from]
-  const box = VIDEO_SCENE.bookcases[from]
+  const boxTop = shelvesTop(scene)
+  const boxBottom = shelvesBottom(scene)
+  const frame = scene.frames[from]
+  const box = scene.bookcases[from]
   const refW = frame.right - frame.left
-  const refH = VIDEO_SCENE.framesBottom - VIDEO_SCENE.framesTop
+  const refH = scene.framesBottom - scene.framesTop
   const k = size.width / refW
   const lifted = !dropping && !reduceMotion
 
@@ -81,9 +84,9 @@ export function BookcaseDragLayer() {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `url("${VIDEO_SCENE.poster}")`,
-            backgroundSize: `${VIDEO_SCENE.width * k}px ${VIDEO_SCENE.height * k}px`,
-            backgroundPosition: `${-frame.left * k}px ${-VIDEO_SCENE.framesTop * k}px`,
+            backgroundImage: `url("${scene.poster}")`,
+            backgroundSize: `${scene.width * k}px ${scene.height * k}px`,
+            backgroundPosition: `${-frame.left * k}px ${-scene.framesTop * k}px`,
           }}
         />
         <div
@@ -92,8 +95,8 @@ export function BookcaseDragLayer() {
           style={{
             left: `${((box.left - frame.left) / refW) * 100}%`,
             width: `${((box.right - box.left) / refW) * 100}%`,
-            top: `${((SHELVES_TOP - VIDEO_SCENE.framesTop) / refH) * 100}%`,
-            height: `${((SHELVES_BOTTOM - SHELVES_TOP) / refH) * 100}%`,
+            top: `${((boxTop - scene.framesTop) / refH) * 100}%`,
+            height: `${((boxBottom - boxTop) / refH) * 100}%`,
           }}
         />
       </motion.div>

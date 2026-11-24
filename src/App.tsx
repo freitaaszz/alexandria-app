@@ -6,6 +6,7 @@ import { BookcaseDragLayer } from '@/features/drag/BookcaseDragLayer'
 import { DragAnnouncer, DragLayer } from '@/features/drag/DragLayer'
 import { SearchDialog } from '@/features/search/SearchDialog'
 import { FocusControls } from '@/features/video-scene/FocusControls'
+import { ThemePicker } from '@/features/video-scene/ThemePicker'
 import { VideoLibrary } from '@/features/video-scene/VideoLibrary'
 import { useUi } from '@/store/ui'
 
@@ -37,6 +38,7 @@ export default function App() {
             {import.meta.env.DEV && (
               <DevTools debug={debug} onDebugChange={setDebug} />
             )}
+            <ThemePicker />
             <button
               type="button"
               onClick={() => setSearchOpen(true)}

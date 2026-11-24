@@ -1,9 +1,4 @@
 import { LIBRARY } from '@/features/shelf/config'
-import {
-  SHELVES_BOTTOM,
-  SHELVES_TOP,
-  VIDEO_SCENE,
-} from '@/features/video-scene/scene'
 
 /**
  * Temas (cenários). Cada tema define as imagens renderizadas no Blender,
@@ -82,35 +77,11 @@ export const ESCOLA_DE_MAGIA: Theme = {
 }
 
 /**
- * Acampamento em vídeo (gerado por IA). Aqui a "estante" do site é a parte interna
- * de cada estante do vídeo: os slots ocupam toda a largura e as prateleiras são
- * medidas em % da altura dessa caixa (ver features/video-scene/scene.ts).
+ * Tema da versão em imagem (Blender). O site hoje usa os cenários em vídeo
+ * (features/video-scene/scene.ts); este fica para o caminho em imagem.
  */
-const shelfBoxHeight = SHELVES_BOTTOM - SHELVES_TOP
-export const SALA_VIDEO: Theme = {
-  id: 'acampamento',
-  name: 'Acampamento ao Entardecer',
-  images: ESCOLA_DE_MAGIA.images,
-  bookcase: {
-    width: VIDEO_SCENE.bookcases[0].right - VIDEO_SCENE.bookcases[0].left,
-    height: shelfBoxHeight,
-    slotsLeft: 0,
-    slotsWidth: 100,
-    shelves: VIDEO_SCENE.shelves.map((row) => ({
-      top: ((row.top - SHELVES_TOP) / shelfBoxHeight) * 100,
-      bottom: ((row.bottom - SHELVES_TOP) / shelfBoxHeight) * 100,
-    })),
-  },
-  // Golden hour: luz dourada e sombras suaves (as prateleiras do vídeo já vêm vazias)
-  light: {
-    warm: 'rgb(255 196 110)',
-    shadow: 'rgb(48 28 14)',
-  },
-  floatingCandles: false,
-}
-
-/** Tema em uso. (A troca de temas pela pessoa vem depois.) */
-export const THEME = SALA_VIDEO
+export const THEME = ESCOLA_DE_MAGIA
 
 /** Largura de um slot em "cqw" (% da largura da estante). */
-export const SLOT_WIDTH_CQW = THEME.bookcase.slotsWidth / LIBRARY.slotsPerShelf
+// Nos cenários em vídeo os slots ocupam toda a largura da estante.
+export const SLOT_WIDTH_CQW = 100 / LIBRARY.slotsPerShelf
