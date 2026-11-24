@@ -119,6 +119,19 @@
 - [x] Diferenciar "clique" (abre o modal) de "segurar" (arrasta)
 - **Pronto quando:** arrastar no celular for tão gostoso quanto no desktop.
 
+### Etapa 8 (decisão final, 2026-11-23) — Cenário em vídeo
+
+**O cenário do site é um vídeo gerado por IA (PixVerse)** da biblioteca do castelo, rodando em loop no fundo, com a aplicação por cima: os livros ficam encaixados nas prateleiras do vídeo. Branch `cenario-video`.
+
+- [x] Vídeo em loop cobrindo a tela, com zoom da câmera compensado (a sala fica parada) e transição suave no loop
+- [x] As 4 prateleiras de cima recebem os livros; a de baixo mantém os livros do vídeo como decoração
+- [x] Busca, voo do livro, modal e arrastar funcionando por cima do vídeo (testado no desktop)
+- [x] Parallax leve com o mouse (congela durante o arraste)
+- [ ] Trocar pelo vídeo em resolução maior (o atual veio do WhatsApp, 848×478)
+- [ ] Celular (depois)
+
+O caminho 3D em tempo real (sub-etapas 8.1–8.6 abaixo) fica pausado; o trabalho está nas branches `prova-3d` e `sala-3d`.
+
 ### Etapa 8 — Primeiro cenário: Alexandria em 3D de verdade (desktop)
 
 **Decisão (2026-11-22):** o cenário passa a ser uma **sala 3D rodando no navegador** (Three.js / React Three Fiber), como a referência da arena: câmera cinematográfica voando até as estantes, livros 3D e luz "assada" no Blender. Dados, busca, modal e regras continuam; a parte visual das estantes, dos livros e do arrastar é refeita em 3D.
