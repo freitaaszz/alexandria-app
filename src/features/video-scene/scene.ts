@@ -47,6 +47,11 @@ export type VideoScene = {
    * vídeo já vêm com livros (cobre os livros do vídeo).
    */
   shelfBackdrop?: boolean
+  /**
+   * Usa o próprio quadro do vídeo como mapa de luz dos livros (só quando as
+   * prateleiras do vídeo estão vazias; ver lightMap.ts).
+   */
+  lightMap?: boolean
 }
 
 /** Biblioteca do castelo (PixVerse). As prateleiras do vídeo têm livros. */
@@ -112,6 +117,7 @@ const ACAMPAMENTO: VideoScene = {
     { top: 540, bottom: 600 },
   ],
   light: { warm: 'rgb(255 196 110)', shadow: 'rgb(48 28 14)' },
+  lightMap: true,
 }
 
 /** Castelo à noite (Kling), prateleiras vazias com spots de luz. */
@@ -144,6 +150,7 @@ const CASTELO_NOITE: VideoScene = {
     { top: 537, bottom: 582 },
   ],
   light: { warm: 'rgb(255 180 110)', shadow: 'rgb(8 5 4)' },
+  lightMap: true,
 }
 
 export const SCENES = [CASTELO_NOITE, ACAMPAMENTO, CASTELO] as const

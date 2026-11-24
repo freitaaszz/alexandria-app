@@ -3,6 +3,10 @@ import { sourceBookcase, useBookcaseDrag } from '@/features/drag/bookcaseDrag'
 import { justDragged, useDrag } from '@/features/drag/dragStore'
 import { arrange, isBlocked } from '@/features/drag/logic'
 import { THEME, type ShelfArea } from '@/features/theme/themes'
+import {
+  ShelfLightContext,
+  type ShelfLight,
+} from '@/features/video-scene/lightMap'
 import { useLibrary } from '@/store/library'
 import { useUi } from '@/store/ui'
 import { LIBRARY, range } from './config'
@@ -16,6 +20,8 @@ type ShelfProps = {
   area: ShelfArea
   /** Visual do cenário: faixa dos slots, luz e fundo de madeira. */
   look?: ShelfLook
+  /** Mapa de luz do vídeo para os livros (cenários com prateleiras vazias). */
+  light?: ShelfLight | null
 }
 
 export type ShelfLook = {
@@ -48,6 +54,7 @@ export function Shelf({
   debug,
   area,
   look = DEFAULT_LOOK,
+  light = null,
 }: ShelfProps) {
   const books = useLibrary((s) => s.books)
   const activeId = useDrag((s) => s.active?.bookId)
@@ -132,48 +139,59 @@ export function Shelf({
           }}
         />
       )}
-      <div
-        data-shelf={`${bookcase}-${shelf}`}
-        className="grid h-full items-end gap-[0.12cqw]"
-        style={{
-          gridTemplateColumns: `repeat(${LIBRARY.slotsPerShelf}, minmax(0, 1fr))`,
-        }}
-      >
-        {range(LIBRARY.slotsPerShelf).map((slot) => (
-          <Slot
-            key={slot}
-            position={{ bookcase, shelf, slot }}
-            book={shelfBooks.find((b) => b.position.slot === slot)}
-            debug={debug}
-            dragging={!!activeId}
-            isDropTarget={!!activeId && !blocked && isTargetShelf}
-          />
-        ))}
-      </div>
+      <ShelfLightContext.Provider value={light}>
+        <div
+          data-shelf={`${bookcase}-${shelf}`}
+          className="grid h-full items-end gap-[0.12cqw]"
+          style={{
+            gridTemplateColumns: `repeat(${LIBRARY.slotsPerShelf}, minmax(0, 1fr))`,
+          }}
+        >
+          {range(LIBRARY.slotsPerShelf).map((slot) => (
+            <Slot
+              key={slot}
+              position={{ bookcase, shelf, slot }}
+              book={shelfBooks.find((b) => b.position.slot === slot)}
+              debug={debug}
+              dragging={!!activeId}
+              isDropTarget={!!activeId && !blocked && isTargetShelf}
+            />
+          ))}
+        </div>
+      </ShelfLightContext.Provider>
 
       {/*
+        Sem mapa de luz (cenário em imagem ou prateleiras do vídeo com livros):
+        luz genérica por cima da prateleira. Com mapa, cada livro recebe a luz
+        do vídeo e a própria sombra (ver Book3D).
+      */}
+      {!light && (
+        <>
+          {/*
         Luz da cena sobre os livros (por cima deles, sem bloquear cliques):
         sombra da tábua de cima, penumbra nas pontas e sombra de contato embaixo.
       */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 -top-[8%] bottom-0 z-30 mix-blend-multiply"
-        style={{
-          backgroundImage: [
-            `linear-gradient(180deg, ${look.light.shadow} 0%, rgb(12 6 3 / 0.55) 9%, transparent 34%)`,
-            'linear-gradient(90deg, rgb(12 6 3 / 0.5), transparent 12%, transparent 80%, rgb(12 6 3 / 0.55))',
-            'linear-gradient(0deg, rgb(12 6 3 / 0.6), transparent 4%)',
-          ].join(', '),
-        }}
-      />
-      {/* Brilho quente das velas vindo do alto à esquerda */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-30 opacity-40 mix-blend-soft-light"
-        style={{
-          backgroundImage: `radial-gradient(120% 90% at 15% 30%, ${look.light.warm}, transparent 70%)`,
-        }}
-      />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 -top-[8%] bottom-0 z-30 mix-blend-multiply"
+            style={{
+              backgroundImage: [
+                `linear-gradient(180deg, ${look.light.shadow} 0%, rgb(12 6 3 / 0.55) 9%, transparent 34%)`,
+                'linear-gradient(90deg, rgb(12 6 3 / 0.5), transparent 12%, transparent 80%, rgb(12 6 3 / 0.55))',
+                'linear-gradient(0deg, rgb(12 6 3 / 0.6), transparent 4%)',
+              ].join(', '),
+            }}
+          />
+          {/* Brilho quente das velas vindo do alto à esquerda */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-30 opacity-40 mix-blend-soft-light"
+            style={{
+              backgroundImage: `radial-gradient(120% 90% at 15% 30%, ${look.light.warm}, transparent 70%)`,
+            }}
+          />
+        </>
+      )}
       {/* Cenário em vídeo: luz baixa e quente de vela sobre os livros, igual à do vídeo */}
       {look.backdrop && (
         <div

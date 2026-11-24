@@ -1,4 +1,10 @@
+import { useContext, type CSSProperties } from 'react'
+import { LIBRARY } from '@/features/shelf/config'
 import { SLOT_WIDTH_CQW } from '@/features/theme/themes'
+import {
+  ShelfLightContext,
+  type ShelfLight,
+} from '@/features/video-scene/lightMap'
 import type { Book } from '@/types/book'
 import { spineHeight, spineWidth } from './geometry'
 import { useSpinePalette } from './useSpinePalette'
@@ -22,6 +28,46 @@ const PAGES =
 /** Ouro envelhecido para filetes e títulos. */
 const GOLD = 'linear-gradient(180deg, #f3dc9a 0%, #c99a45 45%, #8a6424 100%)'
 const GOLD_TEXT = '#e0bc72'
+
+/** Retângulo em frações da prateleira (0–1). */
+type ShelfRect = { left: number; top: number; width: number; height: number }
+
+/**
+ * Pedaço do mapa de luz que cai sobre `rect` (em frações da prateleira),
+ * como fundo de um elemento do tamanho desse retângulo.
+ */
+function lightStyle(light: ShelfLight, rect: ShelfRect): CSSProperties {
+  // Tamanho e origem do quadro inteiro, em frações da prateleira
+  const imageW = light.sceneWidth / light.width
+  const imageH = light.sceneHeight / light.height
+  const originX = -light.left / light.width
+  const originY = -light.top / light.height
+  // Agora relativos ao elemento
+  const sx = imageW / rect.width
+  const sy = imageH / rect.height
+  const offX = (originX - rect.left) / rect.width
+  const offY = (originY - rect.top) / rect.height
+  // background-position em %: deslocamento = p × (elemento − imagem)
+  return {
+    backgroundImage: `url("${light.url}")`,
+    backgroundSize: `${sx * 100}% ${sy * 100}%`,
+    backgroundPosition: `${(offX / (1 - sx)) * 100}% ${(offY / (1 - sy)) * 100}%`,
+    filter: 'brightness(var(--scene-flicker, 1))',
+  }
+}
+
+/** Multiplica a cor do que está embaixo pela luz do vídeo naquele ponto. */
+function LightLayer({ style }: { style: CSSProperties }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 mix-blend-multiply"
+      style={style}
+    />
+  )
+}
+
+const SLOT_CENTER = (LIBRARY.slotsPerShelf - 1) / 2
 
 /** Uma nervura em relevo (as "costelas" das lombadas antigas) com filetes dourados. */
 function Band({ at }: { at: string }) {
@@ -55,6 +101,28 @@ export function Book3D({ book }: { book: Book }) {
   const width = spineWidth(book)
   const height = spineHeight(book)
 
+  // Luz do vídeo (só na prateleira; o livro "na mão" fica sem)
+  const light = useContext(ShelfLightContext)
+  const slot = book.position.slot
+  const n = LIBRARY.slotsPerShelf
+  const spineRect: ShelfRect = {
+    left: (slot + (1 - width / 100) / 2) / n,
+    top: 1 - height / 100,
+    width: width / 100 / n,
+    height: height / 100,
+  }
+  const spineLight = light && lightStyle(light, spineRect)
+  // As páginas (topo) recebem a luz logo acima da lombada
+  const pagesLight =
+    light &&
+    lightStyle(light, {
+      ...spineRect,
+      top: spineRect.top - 0.06,
+      height: 0.06,
+    })
+  // A sombra no fundo da estante vai para longe do centro (a luz vem do meio)
+  const shadowSide = (slot - SLOT_CENTER) / SLOT_CENTER
+
   const bookWidthCqw = (SLOT_WIDTH_CQW * width) / 100
   const titleSize = Math.min(1.9, bookWidthCqw * 0.5)
   const showAuthor = width >= 68 && book.authors.length > 0
@@ -71,6 +139,30 @@ export function Book3D({ book }: { book: Book }) {
       className="relative transition-transform duration-300 ease-out [transform-style:preserve-3d] group-hover:[@media(hover:hover)]:-translate-y-[2.5%]"
       style={{ width: `${width}%`, height: `${height}%` }}
     >
+      {light && (
+        <>
+          {/* Sombra no fundo da estante, atrás do livro */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 rounded-[0.4cqw] bg-black"
+            style={{
+              transform: `translateZ(calc(${DEPTH} * -1)) translateX(${shadowSide * 18}%) translateY(4%)`,
+              filter: 'blur(0.9cqw)',
+              opacity: 0.6,
+            }}
+          />
+          {/* Sombra de contato na tábua */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-x-[35%] -bottom-[2.5%] h-[6%]"
+            style={{
+              backgroundImage:
+                'radial-gradient(50% 50% at 50% 50%, rgb(0 0 0 / 0.75), transparent)',
+            }}
+          />
+        </>
+      )}
+
       {/* Lombada */}
       <div
         className="absolute inset-0 overflow-hidden rounded-[0.35cqw] [backface-visibility:hidden]"
@@ -130,6 +222,7 @@ export function Book3D({ book }: { book: Book }) {
             backgroundImage: `${SPINE_SHADING}, linear-gradient(180deg, rgb(0 0 0/0.35), transparent 6%, transparent 94%, rgb(0 0 0/0.45))`,
           }}
         />
+        {spineLight && <LightLayer style={spineLight} />}
       </div>
 
       {/* Capa (lado direito) */}
@@ -146,7 +239,9 @@ export function Book3D({ book }: { book: Book }) {
           backgroundSize: 'cover',
           backgroundPosition: 'left center',
         }}
-      />
+      >
+        {spineLight && <LightLayer style={spineLight} />}
+      </div>
 
       {/* Contracapa (lado esquerdo) */}
       <div
@@ -159,7 +254,9 @@ export function Book3D({ book }: { book: Book }) {
           backgroundImage:
             'linear-gradient(270deg, rgb(0 0 0/0.65), rgb(0 0 0/0.4))',
         }}
-      />
+      >
+        {spineLight && <LightLayer style={spineLight} />}
+      </div>
 
       {/* Páginas (topo) */}
       <div
@@ -170,7 +267,9 @@ export function Book3D({ book }: { book: Book }) {
           transform: 'rotateX(90deg)',
           backgroundImage: `linear-gradient(0deg, rgb(0 0 0/0.1) 30%, rgb(0 0 0/0.75)), ${PAGES}`,
         }}
-      />
+      >
+        {pagesLight && <LightLayer style={pagesLight} />}
+      </div>
     </div>
   )
 }

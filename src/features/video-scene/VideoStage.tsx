@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useDrag } from '@/features/drag/dragStore'
 import { useUi } from '@/store/ui'
+import { startFlickerSampler } from './lightMap'
 import { focusFrame, pctX, pctY, type VideoScene } from './scene'
 
 /** Margem extra para a compensação de zoom nunca mostrar borda. */
@@ -160,7 +161,11 @@ export function VideoStage({
     }
     document.addEventListener('visibilitychange', onVisibility)
 
+    // Brilho das velas ao vivo para a luz dos livros
+    const stopFlicker = startFlickerSampler(scene, () => videos[active])
+
     return () => {
+      stopFlicker()
       cancelAnimationFrame(frame)
       window.removeEventListener('pointermove', onMove)
       document.removeEventListener('visibilitychange', onVisibility)

@@ -14,6 +14,7 @@ import {
   shelvesTop,
   useScene,
 } from './scene'
+import { useLightMap } from './lightMap'
 import { VideoStage } from './VideoStage'
 
 /**
@@ -31,6 +32,7 @@ export function VideoLibrary({ debug }: { debug: boolean }) {
   const caseDragging = useBookcaseDrag((s) => s.from !== null)
   const inRoom = focusedBookcase === null && !focusedShelf
   const scene = useScene()
+  const lightMap = useLightMap(scene)
   const areas = shelfAreas(scene)
   const top = shelvesTop(scene)
   const bottom = shelvesBottom(scene)
@@ -110,6 +112,21 @@ export function VideoLibrary({ debug }: { debug: boolean }) {
                   debug={debug}
                   area={areas[shelf]}
                   look={look}
+                  light={
+                    lightMap
+                      ? {
+                          url: lightMap,
+                          sceneWidth: scene.width,
+                          sceneHeight: scene.height,
+                          left: box.left,
+                          top: scene.shelves[shelf].top,
+                          width: box.right - box.left,
+                          height:
+                            scene.shelves[shelf].bottom -
+                            scene.shelves[shelf].top,
+                        }
+                      : null
+                  }
                 />
               ))}
             </section>
