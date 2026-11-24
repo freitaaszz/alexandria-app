@@ -70,6 +70,12 @@ Site de **uma única página**: uma biblioteca pessoal com **3 estantes** vazias
 - Soltar fora de um slot devolve o livro à posição original, com animação.
 - No celular, o toque longo evita conflito com a rolagem da tela. No Android há vibração leve ao pegar o livro, quando suportada.
 
+### RF04b — Zoom na prateleira
+
+- Clicar numa prateleira faz a câmera **aproximar** dela: a prateleira ocupa a tela e os livros ficam grandes e legíveis; o resto da sala desfoca e escurece.
+- Dentro do zoom tudo funciona: abrir o livro (modal) e arrastar para reorganizar.
+- Trocar de prateleira com as setas na tela ou ← → no teclado; voltar à sala com Esc, botão "Voltar à sala" ou clique fora.
+
 ### RF05 — Modal de informações do livro
 
 Ao clicar ou tocar no livro (sem arrastar), abre um modal com:

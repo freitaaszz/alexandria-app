@@ -127,6 +127,7 @@
 - [x] As 4 prateleiras de cima recebem os livros; a de baixo mantém os livros do vídeo como decoração
 - [x] Busca, voo do livro, modal e arrastar funcionando por cima do vídeo (testado no desktop)
 - [x] Parallax leve com o mouse (congela durante o arraste)
+- [x] **Zoom na prateleira:** clicar numa prateleira aproxima a câmera (ela ocupa a tela, livros grandes e legíveis, sala desfocada); setas ‹ › e ← → trocam de prateleira; Esc / "Voltar à sala" / clique fora voltam. Modal e arrastar funcionam dentro do zoom
 - [x] Vídeo em resolução maior: o original (848×478, via WhatsApp) foi melhorado com IA no PC (Real-ESRGAN 4× → 1920×1082)
 - [ ] Celular (depois)
 
