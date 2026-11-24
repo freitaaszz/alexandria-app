@@ -66,7 +66,8 @@ async function buildLightMap(scene: VideoScene) {
   for (let i = 0; i < px.length; i += 4) {
     const l = luma(i)
     for (let c = 0; c < 3; c++) {
-      const v = (l + (px[i + c] - l) * KEEP_COLOR) / white
+      // Curva suave: os cantos escuros escurecem sem apagar os livros
+      const v = ((l + (px[i + c] - l) * KEEP_COLOR) / white) ** 0.6
       px[i + c] = Math.round(Math.min(1, Math.max(FLOOR, v)) * 255)
     }
   }

@@ -93,7 +93,9 @@ export function VideoStage({
   const videoA = useRef<HTMLVideoElement>(null)
   const videoB = useRef<HTMLVideoElement>(null)
 
+  // Vídeo em loop (cenários em imagem não têm)
   useEffect(() => {
+    if (!scene.src) return
     const videos = [videoA.current!, videoB.current!]
     const { zoom, loopCrossfade } = scene
     const origin = `${(zoom.centerX / scene.width) * 100}% ${
@@ -137,6 +139,24 @@ export function VideoStage({
     }
     frame = requestAnimationFrame(tick)
 
+    // Economiza bateria/CPU com a aba escondida
+    const onVisibility = () => {
+      if (document.hidden) videos.forEach((v) => v.pause())
+      else void videos[active].play().catch(() => {})
+    }
+    document.addEventListener('visibilitychange', onVisibility)
+
+    // Brilho das velas ao vivo para a luz dos livros
+    const stopFlicker = startFlickerSampler(scene, () => videos[active])
+
+    return () => {
+      stopFlicker()
+      cancelAnimationFrame(frame)
+      document.removeEventListener('visibilitychange', onVisibility)
+    }
+  }, [scene])
+
+  useEffect(() => {
     // Parallax com o mouse (desligado para quem pediu menos movimento)
     const onMove = (e: PointerEvent) => {
       if (prefersReducedMotion() || e.pointerType !== 'mouse') return
@@ -153,24 +173,8 @@ export function VideoStage({
       stageRef.current?.style.setProperty('--parallax', `${dx}px, ${dy}px`)
     }
     window.addEventListener('pointermove', onMove)
-
-    // Economiza bateria/CPU com a aba escondida
-    const onVisibility = () => {
-      if (document.hidden) videos.forEach((v) => v.pause())
-      else void videos[active].play().catch(() => {})
-    }
-    document.addEventListener('visibilitychange', onVisibility)
-
-    // Brilho das velas ao vivo para a luz dos livros
-    const stopFlicker = startFlickerSampler(scene, () => videos[active])
-
-    return () => {
-      stopFlicker()
-      cancelAnimationFrame(frame)
-      window.removeEventListener('pointermove', onMove)
-      document.removeEventListener('visibilitychange', onVisibility)
-    }
-  }, [scene])
+    return () => window.removeEventListener('pointermove', onMove)
+  }, [])
 
   return (
     <div className="pointer-events-none fixed inset-0 overflow-hidden bg-black">
@@ -186,27 +190,38 @@ export function VideoStage({
           style={{ width: size.width, height: size.height, transform }}
         >
           <div className="absolute inset-0">
-            {/* Dois vídeos iguais se revezam para o loop não ter pulo */}
-            <video
-              ref={videoA}
-              src={scene.src}
-              poster={scene.poster}
-              muted
-              playsInline
-              preload="auto"
-              aria-hidden="true"
-              className="absolute inset-0 size-full object-cover"
-            />
-            <video
-              ref={videoB}
-              src={scene.src}
-              poster={scene.poster}
-              muted
-              playsInline
-              preload="auto"
-              aria-hidden="true"
-              className="absolute inset-0 size-full object-cover"
-            />
+            {scene.src ? (
+              <>
+                {/* Dois vídeos iguais se revezam para o loop não ter pulo */}
+                <video
+                  ref={videoA}
+                  src={scene.src}
+                  poster={scene.poster}
+                  muted
+                  playsInline
+                  preload="auto"
+                  aria-hidden="true"
+                  className="absolute inset-0 size-full object-cover"
+                />
+                <video
+                  ref={videoB}
+                  src={scene.src}
+                  poster={scene.poster}
+                  muted
+                  playsInline
+                  preload="auto"
+                  aria-hidden="true"
+                  className="absolute inset-0 size-full object-cover"
+                />
+              </>
+            ) : (
+              <img
+                src={scene.poster}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 size-full object-cover"
+              />
+            )}
           </div>
           {/*
           Holofote: com uma prateleira em foco, o resto escurece e a prateleira

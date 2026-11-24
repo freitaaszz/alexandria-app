@@ -20,8 +20,9 @@ export type VideoScene = {
   id: string
   /** Nome no seletor de tema. */
   name: string
-  src: string
-  /** 1º quadro do vídeo (aparece antes de ele carregar e na estante arrastada). */
+  /** Vídeo em loop. Sem ele, o cenário é só a imagem `poster` (parada). */
+  src?: string
+  /** 1º quadro do vídeo (ou a imagem do cenário parado). */
   poster: string
   width: number
   height: number
@@ -153,7 +154,44 @@ const CASTELO_NOITE: VideoScene = {
   lightMap: true,
 }
 
-export const SCENES = [CASTELO_NOITE, ACAMPAMENTO, CASTELO] as const
+/** Castelo à noite em imagem parada 4K (Gemini), para testar a nitidez. */
+const CASTELO_IMAGEM: VideoScene = {
+  id: 'castelo-imagem',
+  name: 'Castelo (imagem 4K)',
+  poster: '/cenarios/castelo-imagem/fundo.webp',
+  width: 2752,
+  height: 1536,
+  zoom: { centerX: 1376, centerY: 768, perSecond: 0 },
+  loopCrossfade: 0,
+  bookcases: [
+    { left: 690, right: 1107 },
+    { left: 1165, right: 1583 },
+    { left: 1643, right: 2060 },
+  ],
+  frames: [
+    { left: 656, right: 1136 },
+    { left: 1136, right: 1613 },
+    { left: 1613, right: 2097 },
+  ],
+  framesTop: 590,
+  framesBottom: 1323,
+  shelves: [
+    { top: 642, bottom: 758 },
+    { top: 766, bottom: 880 },
+    { top: 888, bottom: 1003 },
+    { top: 1011, bottom: 1125 },
+    { top: 1133, bottom: 1248 },
+  ],
+  light: { warm: 'rgb(255 180 110)', shadow: 'rgb(8 5 4)' },
+  lightMap: true,
+}
+
+export const SCENES = [
+  CASTELO_IMAGEM,
+  CASTELO_NOITE,
+  ACAMPAMENTO,
+  CASTELO,
+] as const
 
 /** Cenário escolhido (salvo no navegador). */
 export const useSceneStore = create<{

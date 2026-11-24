@@ -6,7 +6,7 @@ import {
   type ShelfLight,
 } from '@/features/video-scene/lightMap'
 import type { Book } from '@/types/book'
-import { spineHeight, spineWidth } from './geometry'
+import { hashString, spineHeight, spineWidth } from './geometry'
 import { useSpinePalette } from './useSpinePalette'
 
 /** Profundidade do livro (da lombada até o fundo da estante). */
@@ -93,6 +93,210 @@ function Band({ at }: { at: string }) {
 }
 
 /**
+ * Tipos de lombada, escolhidos de forma estável para cada livro (como numa
+ * estante real, onde quase nada combina):
+ * - jacket: sobrecapa impressa (livro moderno), com a arte da capa;
+ * - cloth: capa dura de tecido, fosca, título em serifa;
+ * - leather: couro antigo com nervuras e ouro.
+ */
+type SpineKind = 'jacket' | 'cloth' | 'leather'
+
+function spineKind(book: Book): SpineKind {
+  const r = hashString(`${book.id}k`)
+  if (r < 0.5 && book.coverUrl) return 'jacket'
+  if (r < 0.8) return 'cloth'
+  return 'leather'
+}
+
+/** Tecido: trama fina cruzada. */
+const CLOTH =
+  'repeating-linear-gradient(0deg, rgb(255 255 255/0.05) 0 0.08cqw, transparent 0.08cqw 0.2cqw), repeating-linear-gradient(90deg, rgb(0 0 0/0.08) 0 0.08cqw, transparent 0.08cqw 0.2cqw)'
+
+/** Sobrecapa: brilho do papel plastificado, mais estreito que o do couro. */
+const JACKET_SHEEN =
+  'linear-gradient(90deg, rgb(0 0 0/0.4) 0%, rgb(0 0 0/0.05) 7%, rgb(255 255 255/0.14) 18%, rgb(255 255 255/0.03) 30%, transparent 60%, rgb(0 0 0/0.12) 88%, rgb(0 0 0/0.45) 100%)'
+
+/**
+ * Tamanho do título para caber inteiro na lombada (em cqw):
+ * limitado pela largura e pelo espaço na altura.
+ */
+function fitTitle(
+  text: string,
+  widthCqw: number,
+  heightCqw: number,
+  maxFromWidth: number,
+  charWidth: number,
+) {
+  const byHeight = heightCqw / Math.max(4, text.length * charWidth)
+  return Math.max(0.55, Math.min(widthCqw * maxFromWidth, byHeight, 1.9))
+}
+
+const lastName = (book: Book) => book.authors[0]?.split(' ').slice(-1)[0] ?? ''
+
+type SpineFaceProps = {
+  book: Book
+  kind: SpineKind
+  palette: { base: string; accent: string; text: string }
+  widthCqw: number
+  heightCqw: number
+}
+
+/** A frente da lombada, conforme o tipo. */
+function SpineFace({
+  book,
+  kind,
+  palette,
+  widthCqw,
+  heightCqw,
+}: SpineFaceProps) {
+  const darkSpine = palette.text !== '#1a120c'
+  const ink = darkSpine ? '#efe6d6' : '#1d140d'
+  const author = lastName(book)
+
+  if (kind === 'jacket') {
+    const size = fitTitle(book.title, widthCqw, heightCqw * 0.62, 0.52, 0.5)
+    return (
+      <>
+        {/* Arte da capa como textura (sem dar para ler o texto dela) */}
+        <div
+          className="absolute inset-0 opacity-55 mix-blend-soft-light"
+          style={{
+            backgroundImage: `url("${book.coverUrl}")`,
+            backgroundSize: 'auto 100%',
+            backgroundPosition: `${Math.round(hashString(`${book.id}x`) * 100)}% center`,
+            filter: 'blur(0.15cqw)',
+          }}
+        />
+        {/* Autor em cima */}
+        {author && (
+          <div className="absolute inset-x-0 top-[4%] flex h-[20%] justify-center">
+            <span
+              className="max-h-full truncate font-spine leading-none tracking-[0.08em] uppercase [writing-mode:vertical-rl]"
+              style={{ fontSize: `${size * 0.62}cqw`, color: palette.accent }}
+            >
+              {author}
+            </span>
+          </div>
+        )}
+        {/* Título */}
+        <div className="absolute inset-x-0 top-[26%] bottom-[12%] flex items-center justify-center">
+          <span
+            className="max-h-full truncate font-spine leading-none font-medium [writing-mode:vertical-rl]"
+            style={{ fontSize: `${size}cqw`, color: ink }}
+          >
+            {book.title}
+          </span>
+        </div>
+        {/* Marca da editora embaixo */}
+        <div
+          className="absolute bottom-[3.5%] left-1/2 aspect-square w-[34%] -translate-x-1/2 rounded-full opacity-70"
+          style={{ boxShadow: `inset 0 0 0 0.1cqw ${ink}` }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ backgroundImage: JACKET_SHEEN }}
+        />
+      </>
+    )
+  }
+
+  if (kind === 'cloth') {
+    const size = fitTitle(book.title, widthCqw, heightCqw * 0.55, 0.46, 0.55)
+    const stamp = darkSpine ? GOLD_TEXT : '#2a1a0e'
+    return (
+      <>
+        <div className="absolute inset-0" style={{ backgroundImage: CLOTH }} />
+        {/* Desbotado pelo sol no topo */}
+        <div
+          className="absolute inset-x-0 top-0 h-[30%] opacity-30"
+          style={{
+            backgroundImage:
+              'linear-gradient(180deg, rgb(255 240 210/0.35), transparent)',
+          }}
+        />
+        {/* Filetes finos */}
+        {['7%', '8.6%', '91.4%', '93%'].map((at) => (
+          <div
+            key={at}
+            className="absolute inset-x-[8%] h-[0.1cqw] opacity-80"
+            style={{ top: at, backgroundColor: stamp }}
+          />
+        ))}
+        <div className="absolute inset-x-0 top-[13%] bottom-[22%] flex items-center justify-center">
+          <span
+            className="max-h-full truncate font-serif leading-none font-semibold [writing-mode:vertical-rl]"
+            style={{
+              fontSize: `${size}cqw`,
+              color: stamp,
+              textShadow: darkSpine ? '0 0.05cqw 0 rgb(0 0 0/0.6)' : 'none',
+            }}
+          >
+            {book.title}
+          </span>
+        </div>
+        {author && (
+          <div className="absolute inset-x-0 top-[80%] flex h-[9%] justify-center">
+            <span
+              className="max-h-full truncate font-serif leading-none italic [writing-mode:vertical-rl]"
+              style={{
+                fontSize: `${size * 0.7}cqw`,
+                color: stamp,
+                opacity: 0.85,
+              }}
+            >
+              {author}
+            </span>
+          </div>
+        )}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: `${SPINE_SHADING}, linear-gradient(180deg, rgb(0 0 0/0.3), transparent 5%, transparent 95%, rgb(0 0 0/0.4))`,
+            opacity: 0.75,
+          }}
+        />
+      </>
+    )
+  }
+
+  // Couro antigo
+  const size = fitTitle(book.title, widthCqw, heightCqw * 0.5, 0.48, 0.66)
+  const titleColor = darkSpine ? GOLD_TEXT : '#2a1a0e'
+  const titleShadow = darkSpine
+    ? '0 0.08cqw 0 rgb(0 0 0/0.8), 0 -0.05cqw 0 rgb(255 230 170/0.25)'
+    : '0 0.06cqw 0 rgb(255 255 255/0.35)'
+  return (
+    <>
+      <div
+        className="absolute inset-0 opacity-60 mix-blend-overlay"
+        style={{ backgroundImage: LEATHER, backgroundSize: '12cqw' }}
+      />
+      <Band at="8%" />
+      <Band at="86%" />
+      <div className="absolute inset-x-0 top-[18%] bottom-[22%] flex items-center justify-center">
+        <span
+          className="max-h-full truncate font-display leading-none font-semibold tracking-[0.06em] uppercase [writing-mode:vertical-rl]"
+          style={{
+            fontSize: `${size}cqw`,
+            color: titleColor,
+            textShadow: titleShadow,
+          }}
+        >
+          {book.title}
+        </span>
+      </div>
+      {/* Couro gasto nas pontas */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage: `${SPINE_SHADING}, linear-gradient(180deg, rgb(255 230 190/0.12), rgb(0 0 0/0.35) 3%, transparent 8%, transparent 93%, rgb(0 0 0/0.4) 97%, rgb(255 230 190/0.1))`,
+        }}
+      />
+    </>
+  )
+}
+
+/**
  * Um livro em pé na estante: lombada de couro com nervuras e título gravado,
  * capa e contracapa nas laterais e páginas no topo (aparecem levemente com a perspectiva).
  */
@@ -124,14 +328,10 @@ export function Book3D({ book }: { book: Book }) {
   const shadowSide = (slot - SLOT_CENTER) / SLOT_CENTER
 
   const bookWidthCqw = (SLOT_WIDTH_CQW * width) / 100
-  const titleSize = Math.min(1.9, bookWidthCqw * 0.5)
-  const showAuthor = width >= 68 && book.authors.length > 0
-  // Livro escuro: título em ouro. Livro claro: título em tinta escura.
-  const darkSpine = palette.text !== '#1a120c'
-  const titleColor = darkSpine ? GOLD_TEXT : '#2a1a0e'
-  const titleShadow = darkSpine
-    ? '0 0.08cqw 0 rgb(0 0 0/0.8), 0 -0.05cqw 0 rgb(255 230 170/0.25)'
-    : '0 0.06cqw 0 rgb(255 255 255/0.35)'
+  // Altura da lombada em cqw (a prateleira tem a proporção do vídeo)
+  const shelfHeightCqw = light ? (light.height / light.width) * 100 : 30
+  const spineHeightCqw = (shelfHeightCqw * height) / 100
+  const kind = spineKind(book)
 
   return (
     <div
@@ -165,62 +365,15 @@ export function Book3D({ book }: { book: Book }) {
 
       {/* Lombada */}
       <div
-        className="absolute inset-0 overflow-hidden rounded-[0.35cqw] [backface-visibility:hidden]"
-        style={{ backgroundColor: palette.base }}
+        className="absolute inset-0 overflow-hidden rounded-[0.3cqw] [backface-visibility:hidden]"
+        style={{ backgroundColor: palette.base, filter: 'saturate(0.82)' }}
       >
-        {/* Textura de couro */}
-        <div
-          className="absolute inset-0 opacity-60 mix-blend-overlay"
-          style={{ backgroundImage: LEATHER, backgroundSize: '12cqw' }}
-        />
-        {/* Faixa de cor de destaque atrás do título (rótulo) */}
-        <div
-          className="absolute inset-x-[12%] top-[19%] bottom-[24%] rounded-[0.2cqw] opacity-25 mix-blend-luminosity"
-          style={{ backgroundColor: palette.accent }}
-        />
-
-        <Band at="5%" />
-        <Band at="11.5%" />
-        <Band at="83%" />
-        <Band at="89.5%" />
-
-        {/* Título */}
-        <div className="absolute inset-x-0 top-[18%] bottom-[25%] flex items-center justify-center">
-          <span
-            className="max-h-full truncate font-display leading-none font-semibold tracking-[0.06em] uppercase [writing-mode:vertical-rl]"
-            style={{
-              fontSize: `${titleSize}cqw`,
-              color: titleColor,
-              textShadow: titleShadow,
-            }}
-          >
-            {book.title}
-          </span>
-        </div>
-
-        {/* Autor */}
-        {showAuthor && (
-          <div className="absolute inset-x-0 top-[76%] flex h-[6.5%] justify-center">
-            <span
-              className="max-h-full truncate font-serif leading-none italic [writing-mode:vertical-rl]"
-              style={{
-                fontSize: `${titleSize * 0.66}cqw`,
-                color: titleColor,
-                opacity: 0.85,
-                textShadow: titleShadow,
-              }}
-            >
-              {book.authors[0].split(' ').slice(-1)[0]}
-            </span>
-          </div>
-        )}
-
-        {/* Volume, verniz e sujeira nas pontas */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage: `${SPINE_SHADING}, linear-gradient(180deg, rgb(0 0 0/0.35), transparent 6%, transparent 94%, rgb(0 0 0/0.45))`,
-          }}
+        <SpineFace
+          book={book}
+          kind={kind}
+          palette={palette}
+          widthCqw={bookWidthCqw}
+          heightCqw={spineHeightCqw}
         />
         {spineLight && <LightLayer style={spineLight} />}
       </div>
